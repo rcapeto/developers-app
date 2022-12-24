@@ -1,9 +1,10 @@
 import multer from 'multer';
 import path from 'path';
+import { serverConfig } from './server';
 
-const users = {
+const developers = {
   storage: multer.diskStorage({
-    destination: path.join(__dirname, '..', 'uploads_users'),
+    destination: path.join(__dirname, '..', serverConfig.uploads.developers),
     filename: (request, file, callback) => {
       const fileName = `${Date.now()}-${file.originalname}`;
       callback(null, fileName);
@@ -12,5 +13,5 @@ const users = {
 };
 
 export const multerConfig = {
-  users,
+  developers,
 };

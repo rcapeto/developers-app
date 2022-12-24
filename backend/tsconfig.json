@@ -21,15 +21,18 @@
     "noFallthroughCasesInSwitch": false,
     "strictPropertyInitialization": false,
     "paths": {
-      "@app/*": ["./src/app/*"],
-      "@test/*": ["./test/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@application/*": ["./src/app/*"],
+      "@common/*": ["./src/common/*"],
       "@database/*": ["./src/database/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@test/*": ["./test/*"],
       "@config/*": ["./config/*"]
     },
     "allowJs": true,
     "moduleResolution": "node",
-    "isolatedModules": true,
+    "isolatedModules": false,
     "resolveJsonModule": true
   }
 }

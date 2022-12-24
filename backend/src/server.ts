@@ -2,16 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 
-import routes from '@app/routes';
+import { serverConfig } from '@config/server';
+import { routes } from '@routes/index';
 
 const app = express();
-const PORT = process.env.SERVER_PORT ?? 3333;
+const PORT = serverConfig.port;
 
 app.use(cors());
 app.use(express.json());
 app.use(
-  '/uploads_users',
-  express.static(path.join(__dirname, '..', 'uploads')),
+  serverConfig.uploads.developers,
+  express.static(path.join(__dirname, '..', serverConfig.uploads.developers)),
 );
 
 for (const route of routes) {

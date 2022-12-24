@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,39 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id         String     @id @default(uuid())
-  firstName  String
-  lastName   String
-  avatar_url String?
-  document   String
-  github     String
-  name       String
-  password   String
-  createdAt  DateTime   @default(now())
-  articles   Articles[]
-  comments   Comments[]
-  email      String
+model Developers {
+  id           String         @id @default(uuid())
+  username     String
+  name         String
+  avatar_url   String
+  techs        String
+  password     String
+  createdAt    DateTime?      @default(now())
+  github       String
+  publications Publications[]
+  points       Int            @default(0)
+  likes        Likes[]
 }
 
-model Articles {
-  id        String     @id @default(uuid())
-  title     String
-  text      String
-  createdAt DateTime   @default(now())
-  author    Users      @relation(fields: [authorId], references: [id])
-  authorId  String
-  imageUrl  String?
-  comments  Comments[]
-  likes     Int
+model Publications {
+  id          String     @id @default(uuid())
+  createdAt   DateTime?  @default(now())
+  title       String
+  thumbnail   String
+  description String
+  developer   Developers @relation(fields: [developerId], references: [id])
+  developerId String
+  likes       Likes[]
 }
 
-model Comments {
-  id        String   @id @default(uuid())
-  authorId  String
-  author    Users    @relation(fields: [authorId], references: [id])
-  likes     Int
-  articleId String
-  article   Articles @relation(fields: [articleId], references: [id])
-  text      String
+model Likes {
+  id            String       @id @default(uuid())
+  developerId   String
+  publicationId String
+  developer     Developers   @relation(fields: [developerId], references: [id])
+  publication   Publications @relation(fields: [publicationId], references: [id])
 }
