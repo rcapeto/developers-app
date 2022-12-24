@@ -2,11 +2,10 @@
 
 ## Backend 
 
-- [ ] Rotas para criação de usuário 
-- [ ] Rotas para login 
-- [ ] Rotas para criação de Article
-- [ ] Rotas para edição de Article
-- [ ] Rotas para exclusão de Article
+- [ ] C.R.U.D => Usuário 
+- [ ] C.R.U.D => Artigos 
+- [ ] C.R.U.D => Comment 
+- [ ] Account (login, logout) 
 
 ## App 
 
