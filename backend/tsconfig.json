@@ -1,36 +1,35 @@
 {
-   "compilerOptions": {
-     "module": "Node16",
-     "declaration": true,
-     "removeComments": true,
-     "emitDecoratorMetadata": true,
-     "experimentalDecorators": true,
-     "allowSyntheticDefaultImports": true,
-     "target": "es2017",
-     "sourceMap": true,
-     "outDir": "./dist",
-     "baseUrl": "./",
-     "incremental": true,
-     "skipLibCheck": true,
-     "strictNullChecks": true,
-     "strict": true,
-     "noImplicitAny": false,
-     "strictBindCallApply": false,
-     "forceConsistentCasingInFileNames": false,
-     "noFallthroughCasesInSwitch": false,
-     "strictPropertyInitialization": false,
-     "paths": {
-       "@source/*": ["./src/*"],
-       "@config/*": ["./config/*"],
-       "@helpers/*": ["./src/helpers/*"],
-       "@common/*": ["./src/common/*"],
-       "@routes/*": ["./src/routes/*"],
-       "@repositories/*": ["./src/repositories/*"],
-       "@entities/*": ["./src/entities/*"],
-       "@usecases/*": ["./src/usecases/*"],
-       "@test/*": ["./test/*"]
-     },
-     "resolveJsonModule": true
-   }
- }
- 
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@test/*": ["./test/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@database/*": ["./src/database/*"],
+      "@config/*": ["./config/*"]
+    },
+    "allowJs": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "resolveJsonModule": true
+  }
+}

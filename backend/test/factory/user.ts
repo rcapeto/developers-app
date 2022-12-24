@@ -1,29 +1,22 @@
+import { UserBackend } from '@app/views/user';
 import { randomUUID } from 'node:crypto';
 
-import { getUrlEnvironment } from '@source/common/url-environment';
-import { BasicUser, UserEntity } from '@source/entities/user';
+type Override = Partial<UserBackend>;
 
-type Override = Partial<BasicUser>;
-
-export function makeUser(override: Override = {}): UserEntity {
-  const path = override?.avatarUrl ?? '';
-  const firstName = override?.firstName ?? 'John';
-  const lastName = override?.lastName ?? 'Doe';
-  const name = `${firstName} ${lastName}`;
-
+export function makeUser(override: Override = {}): UserBackend {
   return {
-    ...override,
-    avatarUrlMobile: getUrlEnvironment({ isMobile: true, path }),
-    avatarUrlWeb: getUrlEnvironment({ path }),
-    avatarUrl: path,
-    createdAt: new Date(),
-    firstName,
-    lastName,
     articles: [],
-    document: '00000000000',
-    email: 'johndoe@gmail.com',
-    name,
+    comments: [],
+    avatar_url: 'teste.png',
+    createdAt: new Date(),
+    firstName: 'John',
+    lastName: 'Doe',
+    name: 'John Doe',
+    document: '99999999999',
+    email: 'johndoe@example.com',
+    github: 'john_doe',
     id: randomUUID(),
-    password: '@JDpassword123',
+    password: '@JDtest123',
+    ...override,
   };
 }

@@ -11,27 +11,38 @@ datasource db {
 }
 
 model Users {
-  id        String     @id @default(uuid())
-  firstName String
-  lastName  String
-  avatarUrl String?
-  document  String
-  password  String
-  email     String
-  name      String
-  articles  Articles[]
-  createdAt DateTime
+  id         String     @id @default(uuid())
+  firstName  String
+  lastName   String
+  avatar_url String?
+  document   String
+  github     String
+  name       String
+  password   String
+  createdAt  DateTime   @default(now())
+  articles   Articles[]
+  comments   Comments[]
+  email      String
 }
 
 model Articles {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  tags        String
-  image       String
-  authorId    String
-  userId      String
-  author      Users    @relation(fields: [userId], references: [id])
-  createdAt   DateTime
-  updatedAt   DateTime
+  id        String     @id @default(uuid())
+  title     String
+  text      String
+  createdAt DateTime   @default(now())
+  author    Users      @relation(fields: [authorId], references: [id])
+  authorId  String
+  imageUrl  String?
+  comments  Comments[]
+  likes     Int
+}
+
+model Comments {
+  id        String   @id @default(uuid())
+  authorId  String
+  author    Users    @relation(fields: [authorId], references: [id])
+  likes     Int
+  articleId String
+  article   Articles @relation(fields: [articleId], references: [id])
+  text      String
 }

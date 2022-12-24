@@ -20,6 +20,7 @@ export const swaggerConfig: JsonObject = {
       post: {
         tags: ['Users'],
         summary: 'Create User',
+        description: 'How creates a new user',
         requestBody: {
           content: {
             'application/json': {
@@ -30,17 +31,18 @@ export const swaggerConfig: JsonObject = {
                 firstName: 'John',
                 lastName: 'Doe',
                 document: '00000000000',
-                username: 'foobar',
-                password: '@foobar123',
-                confirm_password: '@foobar123',
+                github: 'John Doe',
+                avatar_url: 'Choose a File',
+                password: '@test@123',
+                confirm_password: '@test@123',
                 email: 'johndoe@gmail.com',
               },
             },
           },
         },
         responses: {
-          200: {
-            description: 'Status OK!',
+          201: {
+            description: 'Create user with success',
           },
           400: {
             content: {
@@ -50,14 +52,16 @@ export const swaggerConfig: JsonObject = {
                 },
                 example: {
                   data: {
-                    message:
-                      'User already exists! Please try with other document.',
-                    cause: 'Create Error',
                     isError: true,
+                    cause: 'validation',
+                    message: 'Already exists user!',
                   },
                 },
               },
             },
+          },
+          500: {
+            description: 'Internal server error',
           },
         },
       },
@@ -77,16 +81,19 @@ export const swaggerConfig: JsonObject = {
           email: {
             type: 'string',
           },
-          avatarUrl: {
-            type: 'string',
-          },
-          document: {
-            type: 'string',
-          },
           password: {
             type: 'string',
           },
           confirm_password: {
+            type: 'string',
+          },
+          avatar_url: {
+            type: 'string',
+          },
+          github: {
+            type: 'string',
+          },
+          document: {
             type: 'string',
           },
         },
@@ -94,19 +101,14 @@ export const swaggerConfig: JsonObject = {
       ErrorMessage: {
         type: 'object',
         properties: {
-          data: {
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-              },
-              cause: {
-                type: 'string',
-              },
-              isError: {
-                type: 'boolean',
-              },
-            },
+          message: {
+            type: 'string',
+          },
+          cause: {
+            type: 'string',
+          },
+          isError: {
+            type: 'boolean',
           },
         },
       },
