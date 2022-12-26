@@ -19,6 +19,7 @@ model Developers {
   publications Publications[]
   points       Int            @default(0)
   likes        Likes[]
+  comments     Comments[]
 }
 
 model Publications {
@@ -30,10 +31,23 @@ model Publications {
   developer   Developers @relation(fields: [developerId], references: [id])
   developerId String
   likes       Likes[]
+  comments    Comments[]
+  editAt      DateTime?
 }
 
 model Likes {
   id            String       @id @default(uuid())
+  developerId   String
+  publicationId String
+  developer     Developers   @relation(fields: [developerId], references: [id])
+  publication   Publications @relation(fields: [publicationId], references: [id])
+}
+
+model Comments {
+  id            String       @id @default(uuid())
+  createdAt     DateTime?    @default(now())
+  editAt        DateTime?
+  text          String
   developerId   String
   publicationId String
   developer     Developers   @relation(fields: [developerId], references: [id])

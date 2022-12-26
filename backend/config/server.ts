@@ -21,5 +21,9 @@ export const serverConfig = {
       me: '/developer/me',
       update: '/developer/me/update',
     },
+    publications: {
+      all: '/publications',
+      allDeveloperPublications: '/publications/developer/:id',
+    },
   },
 };

@@ -1,3 +1,4 @@
+import { CommentBackend } from './comment';
 import { LikeBackend } from './like';
 import { PublicationBackend } from './publication';
 
@@ -13,11 +14,12 @@ export interface DeveloperBackend {
   likes: LikeBackend[];
   password: string;
   avatar_url: string;
+  comments: CommentBackend[];
 }
 
 export type DeveloperFrontend = Omit<
   DeveloperBackend,
-  'avatar_url' | 'password'
+  'avatar_url' | 'password' | 'publications'
 > & {
   avatar_url: {
     origin: string;

@@ -130,7 +130,7 @@ export const swaggerConfig: JsonObject = {
         ],
         responses: {
           200: {
-            description: 'Login with success',
+            description: 'Get all developers with success',
             content: {
               'application/json': {
                 schema: {
@@ -354,9 +354,185 @@ export const swaggerConfig: JsonObject = {
         },
       },
     },
+    '/publications': {
+      get: {
+        tags: ['Publications'],
+        summary: 'All',
+        description: 'Get all publications',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'query',
+            name: 'page',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Current page',
+          },
+          {
+            in: 'query',
+            name: 'perPage',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Number of developers per page',
+          },
+          {
+            in: 'query',
+            name: 'search',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Title, description or developer name',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Get all publications with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/GetPublications',
+                },
+                example: {
+                  publications: [],
+                  page: 1,
+                  perPage: 10,
+                  totalPages: 3,
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/developer/:id': {
+      get: {
+        tags: ['Publications'],
+        summary: 'All',
+        description: 'Get all developer publications',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'params',
+            name: 'id',
+            schema: {
+              type: 'number',
+            },
+            required: true,
+            description: 'Developer ID',
+          },
+          {
+            in: 'query',
+            name: 'page',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Current page',
+          },
+          {
+            in: 'query',
+            name: 'perPage',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Number of developers per page',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Get all developer publications with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/GetPublications',
+                },
+                example: {
+                  publications: [],
+                  page: 1,
+                  perPage: 10,
+                  totalPages: 3,
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
+      GetPublications: {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              publications: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    developer: {
+                      type: 'object',
+                      properties: {},
+                    },
+                    comments: {
+                      type: 'array',
+                    },
+                    createdAt: {
+                      type: 'datetime',
+                    },
+                    description: {
+                      type: 'string',
+                    },
+                    title: {
+                      type: 'string',
+                    },
+                    id: {
+                      type: 'string',
+                    },
+                    thumbnail: {
+                      type: 'object',
+                      properties: {
+                        web: { type: 'string ' },
+                        mobile: { type: 'string ' },
+                        origin: { type: 'string ' },
+                      },
+                    },
+                  },
+                },
+              },
+              perPage: {
+                type: 'number',
+              },
+              page: {
+                type: 'number',
+              },
+              totalPages: {
+                type: 'number',
+              },
+            },
+          },
+        },
+      },
       UpdateDeveloper: {
         type: 'object',
         properties: {

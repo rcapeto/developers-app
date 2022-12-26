@@ -1,35 +1,36 @@
+import { ZodError } from 'zod';
 import { ErrorMessage } from '@application/model/error';
-import { FindOneDeveloperUsecase } from '@application/usecases/developers/findOne/find-one-developer-usecase';
-import { RenderDeveloper } from '@application/view/developer';
+import { AllDeveloperPublicationsUsecase } from '@application/usecases/publications/developer-publications/developer-publications-usecase';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { getIdParamsSchema } from '@validation/id-params-validation';
 import { Request, Response } from 'express';
-import { ZodError } from 'zod';
 import { BaseController } from '../base-controller';
 
-export class DeveloperFindOneController implements BaseController {
-  constructor(private usecase: FindOneDeveloperUsecase) {}
+export class AllDeveloperPublicationsController implements BaseController {
+  constructor(private usecase: AllDeveloperPublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
+    const page = +(request.query?.page ?? 1);
+    const perPage = +(request.query?.perPage ?? 10);
+
+    const { id } = getIdParamsSchema().parse(request.params);
+
     try {
-      const { id } = getIdParamsSchema().parse(request.params);
+      const data = await this.usecase.execute({
+        developerId: id,
+        params: {
+          perPage,
+          page,
+        },
+      });
 
-      const developer = await this.usecase.execute({ developerId: id });
+      const { count, ...rest } = data;
 
-      if (!developer) {
-        return response.status(Status.NOT_FOUND).json({
-          data: new ErrorMessage(
-            `Developer with this ID doesn't exists`,
-            'error',
-          ),
-        });
-      }
+      response.setHeader('X-TOTAL-COUNT', count);
 
       return response.status(Status.OK).json({
-        data: {
-          developer: RenderDeveloper.one(developer),
-        },
+        data: rest,
       });
     } catch (err) {
       if (err instanceof ZodError) {

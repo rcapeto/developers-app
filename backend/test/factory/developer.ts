@@ -16,6 +16,7 @@ export function makeDeveloper(override: Override = {}): DeveloperBackend {
     publications: [],
     techs: '',
     username: 'johndoe',
+    comments: [],
     ...override,
   };
 }

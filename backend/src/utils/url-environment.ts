@@ -1,7 +1,7 @@
 type Config = {
   isMobile?: boolean;
   path: string;
-  uploadFolder?: 'uploads_users' | 'uploads_articles';
+  uploadFolder?: 'uploads_users' | 'uploads_publications';
 };
 
 const PORT = process.env.SERVER_PORT ?? 3333;

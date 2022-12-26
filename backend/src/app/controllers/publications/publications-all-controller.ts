@@ -1,12 +1,12 @@
 import { ErrorMessage } from '@application/model/error';
-import { AllDevelopersUsecase } from '@application/usecases/developers/all/all-developers-usecase';
+import { AllPublicationsUsecase } from '@application/usecases/publications/all/all-publications-usecase';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { Request, Response } from 'express';
 import { BaseController } from '../base-controller';
 
-export class DevelopersAllController implements BaseController {
-  constructor(private usecase: AllDevelopersUsecase) {}
+export class PublicationsAllController implements BaseController {
+  constructor(private usecase: AllPublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
     const page = +(request.query?.page ?? 1);
