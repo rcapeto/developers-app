@@ -13,5 +13,13 @@ export const serverConfig = {
       register: '/account/register',
       login: '/account/login',
     },
+    developers: {
+      all: '/developers',
+      delete: '/developer/me/delete',
+      findOne: '/developers/:id',
+      updateGithub: '/developer/me/github',
+      me: '/developer/me',
+      update: '/developer/me/update',
+    },
   },
 };

@@ -1,5 +1,13 @@
-export type ErrorMessageCause = 'validation' | 'server_error' | 'error';
+export type ErrorMessageCause =
+  | 'validation'
+  | 'server_error'
+  | 'error'
+  | 'unauthorized';
 
 export class ErrorMessage {
-  constructor(public message: string, public cause: ErrorMessageCause) {}
+  public error: boolean;
+
+  constructor(public message: string, public cause: ErrorMessageCause) {
+    this.error = true;
+  }
 }

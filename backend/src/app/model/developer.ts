@@ -5,21 +5,23 @@ export interface DeveloperBackend {
   name: string;
   github: string;
   username: string;
-  password: string;
   points: number;
   id: string;
-  avatar_url: string;
   techs: string;
   createdAt: Date;
   publications: PublicationBackend[];
   likes: LikeBackend[];
+  password: string;
+  avatar_url: string;
 }
 
-export interface DeveloperFrontend
-  extends Omit<DeveloperBackend, 'avatar_url'> {
+export type DeveloperFrontend = Omit<
+  DeveloperBackend,
+  'avatar_url' | 'password'
+> & {
   avatar_url: {
-    mobile: string;
-    web: string;
     origin: string;
+    web: string;
+    mobile: string;
   };
-}
+};

@@ -21,7 +21,7 @@ async function main() {
   for (let i = 1; i <= 20; i++) {
     const user = await prisma.developers.create({
       data: {
-        username: `user-t$-{i}`,
+        username: `user-t-${i}`,
         name: `User test [${i}]`,
         avatar_url: '',
         github: `gh-test-${i}`,

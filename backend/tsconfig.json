@@ -28,7 +28,8 @@
       "@routes/*": ["./src/routes/*"],
       "@utils/*": ["./src/utils/*"],
       "@test/*": ["./test/*"],
-      "@config/*": ["./config/*"]
+      "@config/*": ["./config/*"],
+      "@validation/*": ["./src/validation/*"]
     },
     "allowJs": true,
     "moduleResolution": "node",

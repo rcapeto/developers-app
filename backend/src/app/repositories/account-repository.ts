@@ -5,6 +5,12 @@ export interface AccountRepositoryCreateParams {
   username: string;
 }
 
+export interface AccountRepositoryLoginParams {
+  password: string;
+  username: string;
+}
+
 export abstract class AccountRepository {
   abstract register(params: AccountRepositoryCreateParams): Promise<void>;
+  abstract login(params: AccountRepositoryLoginParams): Promise<string>;
 }

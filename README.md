@@ -2,17 +2,16 @@
 
 ## Backend 
 
-- [ ] C.R.U.D => Usuário 
-- [ ] C.R.U.D => Artigos 
-- [ ] C.R.U.D => Comment 
-- [ ] Account (login, logout) 
+- [ x ] C.R.U.D => Developer 
+- [ ] C.R.U.D => Publications 
+- [ ] Likes [like and dislike] 
+- [ x ] Account (login, logout) 
 
 ## App 
 
-- [ ] Tela de login
-- [ ] Tela de cadastro
-- [ ] Tela de Home
-- [ ] Tela de Artciles 
-- [ ] Tela de Chat `v2`
-- [ ] Tela de Profile
-- [ ] Tela de Configurações `v2`
+- [ ] Screen of login
+- [ ] Screen of Register
+- [ ] Screen of Home
+- [ ] Screen of Publications 
+- [ ] Screen of Profile
+- [ ] Screen of Favorites
