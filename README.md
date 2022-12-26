@@ -2,10 +2,10 @@
 
 ## Backend 
 
-- [ x ] C.R.U.D => Developer 
+- [x] C.R.U.D => Developer 
 - [ ] C.R.U.D => Publications 
 - [ ] Likes [like and dislike] 
-- [ x ] Account (login, logout) 
+- [x] Account (login, logout) 
 
 ## App 
 
