@@ -357,7 +357,7 @@ export const swaggerConfig: JsonObject = {
     '/publications': {
       get: {
         tags: ['Publications'],
-        summary: 'All',
+        summary: 'Publication',
         description: 'Get all publications',
         security: [{ bearerAuth: [] }],
         parameters: [
@@ -418,7 +418,7 @@ export const swaggerConfig: JsonObject = {
     '/publications/developer/:id': {
       get: {
         tags: ['Publications'],
-        summary: 'All',
+        summary: 'Publication',
         description: 'Get all developer publications',
         security: [{ bearerAuth: [] }],
         parameters: [
@@ -479,8 +479,8 @@ export const swaggerConfig: JsonObject = {
     '/publications/create': {
       post: {
         tags: ['Publications'],
-        summary: 'All',
-        description: 'Get all developer publications',
+        summary: 'Publication',
+        description: 'Create publication',
         security: [{ bearerAuth: [] }],
         requestBody: {
           content: {
@@ -497,8 +497,127 @@ export const swaggerConfig: JsonObject = {
           },
         },
         responses: {
-          2001: {
+          201: {
             description: 'Created with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/update/:id': {
+      put: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Update publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreatePublication',
+              },
+              example: {
+                thumbnail: 'optional file',
+                description: 'Publication description',
+                title: 'Publication title',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Update with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/delete/:id': {
+      delete: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Delete publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Delete with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/:id': {
+      get: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Find one publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Publication',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Publication',
+                },
+                example: {
+                  data: {
+                    publication: {},
+                  },
+                },
+              },
+            },
           },
           401: {
             description: 'Unauthorized',
@@ -512,6 +631,46 @@ export const swaggerConfig: JsonObject = {
   },
   components: {
     schemas: {
+      Publication: {
+        type: 'object',
+        properties: {
+          developer: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+              },
+              github: {
+                type: 'string',
+              },
+              avatar_url: {
+                type: 'object',
+                properties: {
+                  web: { type: 'string' },
+                  mobile: { type: 'string' },
+                  origin: { type: 'string' },
+                },
+              },
+            },
+          },
+          id: { type: 'string ' },
+          createdAt: { type: 'string ' },
+          title: { type: 'string ' },
+          description: { type: 'string ' },
+          developerId: { type: 'string ' },
+          editAt: { type: 'string ' },
+          comments: { type: 'array' },
+          likes: { type: 'array' },
+          thumbnail: {
+            type: 'object',
+            properties: {
+              web: { type: 'string' },
+              mobile: { type: 'string' },
+              origin: { type: 'string' },
+            },
+          },
+        },
+      },
       CreatePublication: {
         type: 'object',
         properties: {
