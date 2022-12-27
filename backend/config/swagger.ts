@@ -476,9 +476,50 @@ export const swaggerConfig: JsonObject = {
         },
       },
     },
+    '/publications/create': {
+      post: {
+        tags: ['Publications'],
+        summary: 'All',
+        description: 'Get all developer publications',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreatePublication',
+              },
+              example: {
+                thumbnail: 'optional file',
+                description: 'Publication description',
+                title: 'Publication title',
+              },
+            },
+          },
+        },
+        responses: {
+          2001: {
+            description: 'Created with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
+      CreatePublication: {
+        type: 'object',
+        properties: {
+          description: { type: 'string' },
+          title: { type: 'string' },
+          thumbnail: { type: 'string' },
+        },
+      },
       GetPublications: {
         type: 'object',
         properties: {

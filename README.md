@@ -3,7 +3,7 @@
 ## Backend 
 
 - [x] C.R.U.D => Developer 
-- [ ] C.R.U.D => Publications 
+- [x] C.R.U.D => Publications 
 - [ ] Likes [like and dislike] 
 - [x] Account (login, logout) 
 

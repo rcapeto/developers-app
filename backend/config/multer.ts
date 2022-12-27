@@ -12,6 +12,17 @@ const developers = {
   }),
 };
 
+const publications = {
+  storage: multer.diskStorage({
+    destination: path.join(__dirname, '..', serverConfig.uploads.publications),
+    filename: (request, file, callback) => {
+      const fileName = `${Date.now()}-${file.originalname}`;
+      callback(null, fileName);
+    },
+  }),
+};
+
 export const multerConfig = {
   developers,
+  publications,
 };

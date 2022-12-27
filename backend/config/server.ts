@@ -24,6 +24,10 @@ export const serverConfig = {
     publications: {
       all: '/publications',
       allDeveloperPublications: '/publications/developer/:id',
+      create: '/publications/create',
+      update: '/publications/update/:id',
+      delete: '/publications/delete/:id',
+      findOne: '/publications/:id',
     },
   },
 };

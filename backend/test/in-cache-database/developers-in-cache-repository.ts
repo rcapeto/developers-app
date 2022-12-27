@@ -1,7 +1,4 @@
-import {
-  DeveloperBackend,
-  DeveloperFrontend,
-} from '@application/model/developer';
+import { DeveloperBackend } from '@application/model/developer';
 import { ErrorMessage } from '@application/model/error';
 import { makeDeveloper } from '@test/factory/developer';
 import {
@@ -10,7 +7,6 @@ import {
   GetDevelopersResponse,
   UpdateDeveloperParams,
 } from '@application/repositories/developers-repository';
-import { RenderDeveloper } from '@application/view/developer';
 
 export class DevelopersInCacheRepository implements DevelopersRepository {
   private developers: DeveloperBackend[] = [];
@@ -49,7 +45,7 @@ export class DevelopersInCacheRepository implements DevelopersRepository {
   async updateGithub(
     developerId: string,
     github: string,
-  ): Promise<DeveloperFrontend> {
+  ): Promise<DeveloperBackend> {
     const developer = await this.findOne(developerId);
 
     if (!developer) {
@@ -57,7 +53,7 @@ export class DevelopersInCacheRepository implements DevelopersRepository {
     }
 
     developer.github = github;
-    return RenderDeveloper.one(developer);
+    return developer;
   }
 
   async findOne(developerId: string): Promise<DeveloperBackend | null> {
@@ -86,7 +82,7 @@ export class DevelopersInCacheRepository implements DevelopersRepository {
     const developers = this.developers.slice(start, end);
 
     return {
-      developers: RenderDeveloper.many(developers),
+      developers,
       perPage,
       page,
       totalPages: Math.ceil(this.developers.length / perPage),

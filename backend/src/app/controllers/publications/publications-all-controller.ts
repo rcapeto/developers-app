@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@application/model/error';
 import { AllPublicationsUsecase } from '@application/usecases/publications/all/all-publications-usecase';
+import { RenderPublication } from '@application/view/publications';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { Request, Response } from 'express';
@@ -16,12 +17,15 @@ export class PublicationsAllController implements BaseController {
     try {
       const data = await this.usecase.execute({ page, perPage, search });
 
-      const { count, ...rest } = data;
+      const { count, publications, ...rest } = data;
 
       response.setHeader('X-TOTAL-COUNT', count);
 
       return response.status(Status.OK).json({
-        data: rest,
+        data: {
+          ...rest,
+          publications: RenderPublication.many(publications),
+        },
       });
     } catch (err) {
       logger('error', (err as ErrorMessage).message);

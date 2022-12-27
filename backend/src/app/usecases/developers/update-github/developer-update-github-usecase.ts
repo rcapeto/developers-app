@@ -1,4 +1,4 @@
-import { DeveloperFrontend } from '@application/model/developer';
+import { DeveloperBackend } from '@application/model/developer';
 import { DevelopersRepository } from '@application/repositories/developers-repository';
 
 type DeveloperUpdateGithubRequest = {
@@ -6,7 +6,7 @@ type DeveloperUpdateGithubRequest = {
   github: string;
 };
 
-type DeveloperUpdateGithubResponse = Promise<DeveloperFrontend>;
+type DeveloperUpdateGithubResponse = Promise<DeveloperBackend>;
 
 export class DeveloperUpdateGithubUsecase {
   constructor(private developersRepository: DevelopersRepository) {}

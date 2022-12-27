@@ -1,34 +1,33 @@
+import { ZodError } from 'zod';
 import { ErrorMessage } from '@application/model/error';
-import { MeDeveloperUsecase } from '@application/usecases/developers/me/developer-me-usecase';
-import { RenderDeveloper } from '@application/view/developer';
+import { CreatePublicationsUsecase } from '@application/usecases/publications/create/create-publication-usecase';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
+import { getCreatePublicationSchema } from '@validation/create-publication-schema-validation';
 import { Request, Response } from 'express';
-import { ZodError } from 'zod';
 import { BaseController } from '../base-controller';
 
-export class DeveloperMeController implements BaseController {
-  constructor(private usecase: MeDeveloperUsecase) {}
+export class CreatePublicationController implements BaseController {
+  constructor(private usecase: CreatePublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
+    const developerId = request.developer_id;
+
     try {
-      const developerId = request.developer_id;
-      const developer = await this.usecase.execute({ developerId });
+      const { description, title } = getCreatePublicationSchema().parse(
+        request.body,
+      );
 
-      if (!developer) {
-        return response.status(Status.NOT_FOUND).json({
-          data: new ErrorMessage(
-            `Developer with this ID doesn't exists`,
-            'error',
-          ),
-        });
-      }
+      const thumbnail = request.file?.filename ?? '';
 
-      return response.status(Status.OK).json({
-        data: {
-          developer: RenderDeveloper.one(developer),
-        },
+      await this.usecase.execute({
+        description,
+        developerId,
+        title,
+        thumbnail,
       });
+
+      return response.status(Status.CREATED).send();
     } catch (err) {
       if (err instanceof ZodError) {
         const message = err.issues.map((issue) => issue.message).join(', ');
@@ -43,7 +42,7 @@ export class DeveloperMeController implements BaseController {
         const isServerError = error.message === 'Internal Server Error';
         const status = isServerError
           ? Status.INTERNAL_SERVER_ERROR
-          : Status.NOT_FOUND;
+          : Status.BAD_REQUEST;
 
         logger('error', error.message);
 

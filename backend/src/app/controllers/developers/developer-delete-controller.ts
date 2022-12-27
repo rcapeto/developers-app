@@ -10,9 +10,9 @@ export class DeveloperDeleteController implements BaseController {
 
   async handle(request: Request, response: Response) {
     try {
-      const id = request.developer_id;
+      const developerId = request.developer_id;
 
-      await this.usecase.execute({ developerId: id });
+      await this.usecase.execute({ developerId });
 
       request.developer_id = '';
 

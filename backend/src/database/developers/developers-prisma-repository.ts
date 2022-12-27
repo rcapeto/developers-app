@@ -6,11 +6,7 @@ import {
   GetDevelopersResponse,
   UpdateDeveloperParams,
 } from '@application/repositories/developers-repository';
-import { RenderDeveloper } from '@application/view/developer';
-import {
-  DeveloperBackend,
-  DeveloperFrontend,
-} from '@application/model/developer';
+import { DeveloperBackend } from '@application/model/developer';
 import { Password } from '@utils/password';
 
 export class DevelopersPrismaRepository implements DevelopersRepository {
@@ -22,7 +18,7 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
     try {
       const count = await this.countDevelopers();
 
-      const developers = await client.developers.findMany({
+      const developers = (await client.developers.findMany({
         take: perPage,
         skip: (page - 1) * perPage,
         where: {
@@ -44,10 +40,10 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
             },
           ],
         },
-      });
+      })) as DeveloperBackend[];
 
       return {
-        developers: RenderDeveloper.many(developers as DeveloperBackend[]),
+        developers,
         page,
         perPage,
         totalPages: Math.ceil(count / perPage),
@@ -141,7 +137,7 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
   async updateGithub(
     developerId: string,
     github: string,
-  ): Promise<DeveloperFrontend> {
+  ): Promise<DeveloperBackend> {
     try {
       const developer = await this.checkHasDeveloper(developerId);
 
@@ -154,7 +150,7 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
         },
       })) as DeveloperBackend;
 
-      return RenderDeveloper.one(updatedDeveloper);
+      return updatedDeveloper;
     } catch (err) {
       if (err instanceof ErrorMessage) {
         throw err;

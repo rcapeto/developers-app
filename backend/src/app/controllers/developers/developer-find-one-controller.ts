@@ -13,9 +13,9 @@ export class DeveloperFindOneController implements BaseController {
 
   async handle(request: Request, response: Response) {
     try {
-      const { id } = getIdParamsSchema().parse(request.params);
+      const { id: developerId } = getIdParamsSchema().parse(request.params);
 
-      const developer = await this.usecase.execute({ developerId: id });
+      const developer = await this.usecase.execute({ developerId });
 
       if (!developer) {
         return response.status(Status.NOT_FOUND).json({

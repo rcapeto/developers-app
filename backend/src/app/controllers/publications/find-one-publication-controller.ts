@@ -1,32 +1,25 @@
 import { ErrorMessage } from '@application/model/error';
-import { MeDeveloperUsecase } from '@application/usecases/developers/me/developer-me-usecase';
-import { RenderDeveloper } from '@application/view/developer';
+import { FindOnePublicationsUsecase } from '@application/usecases/publications/findOne/find-one-publication-usecase';
+import { RenderPublication } from '@application/view/publications';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
+import { getIdParamsSchema } from '@validation/id-params-validation';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { BaseController } from '../base-controller';
 
-export class DeveloperMeController implements BaseController {
-  constructor(private usecase: MeDeveloperUsecase) {}
+export class FindOnePublicationController implements BaseController {
+  constructor(private usecase: FindOnePublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
     try {
-      const developerId = request.developer_id;
-      const developer = await this.usecase.execute({ developerId });
+      const { id: publicationId } = getIdParamsSchema().parse(request.params);
 
-      if (!developer) {
-        return response.status(Status.NOT_FOUND).json({
-          data: new ErrorMessage(
-            `Developer with this ID doesn't exists`,
-            'error',
-          ),
-        });
-      }
+      const publication = await this.usecase.execute({ publicationId });
 
       return response.status(Status.OK).json({
         data: {
-          developer: RenderDeveloper.one(developer),
+          publication: RenderPublication.one(publication),
         },
       });
     } catch (err) {
@@ -43,7 +36,7 @@ export class DeveloperMeController implements BaseController {
         const isServerError = error.message === 'Internal Server Error';
         const status = isServerError
           ? Status.INTERNAL_SERVER_ERROR
-          : Status.NOT_FOUND;
+          : Status.BAD_REQUEST;
 
         logger('error', error.message);
 

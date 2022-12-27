@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@application/model/error';
 import { DeveloperUpdateGithubUsecase } from '@application/usecases/developers/update-github/developer-update-github-usecase';
+import { RenderDeveloper } from '@application/view/developer';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { getUpdateDeveloperGithubSchema } from '@validation/developer-update-github-validation';
@@ -13,16 +14,16 @@ export class DeveloperUpdateGithubController implements BaseController {
   async handle(request: Request, response: Response) {
     try {
       const { github } = getUpdateDeveloperGithubSchema().parse(request.body);
-      const id = request.developer_id;
+      const developerId = request.developer_id;
 
       const developer = await this.usecase.execute({
-        developerId: id,
+        developerId,
         github,
       });
 
       return response.status(Status.OK).json({
         data: {
-          developer,
+          developer: RenderDeveloper.one(developer),
         },
       });
     } catch (err) {

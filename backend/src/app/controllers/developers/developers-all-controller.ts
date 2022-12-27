@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@application/model/error';
 import { AllDevelopersUsecase } from '@application/usecases/developers/all/all-developers-usecase';
+import { RenderDeveloper } from '@application/view/developer';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { Request, Response } from 'express';
@@ -16,12 +17,15 @@ export class DevelopersAllController implements BaseController {
     try {
       const data = await this.usecase.execute({ page, perPage, search });
 
-      const { count, ...rest } = data;
+      const { count, developers, ...rest } = data;
 
       response.setHeader('X-TOTAL-COUNT', count);
 
       return response.status(Status.OK).json({
-        data: rest,
+        data: {
+          ...rest,
+          developers: RenderDeveloper.many(developers),
+        },
       });
     } catch (err) {
       logger('error', (err as ErrorMessage).message);

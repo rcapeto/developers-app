@@ -1,34 +1,27 @@
+import { ZodError } from 'zod';
 import { ErrorMessage } from '@application/model/error';
-import { MeDeveloperUsecase } from '@application/usecases/developers/me/developer-me-usecase';
-import { RenderDeveloper } from '@application/view/developer';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
 import { Request, Response } from 'express';
-import { ZodError } from 'zod';
 import { BaseController } from '../base-controller';
+import { DeletePublicationsUsecase } from '@application/usecases/publications/delete/delete-publication-usecase';
+import { getIdParamsSchema } from '@validation/id-params-validation';
 
-export class DeveloperMeController implements BaseController {
-  constructor(private usecase: MeDeveloperUsecase) {}
+export class DeletePublicationController implements BaseController {
+  constructor(private usecase: DeletePublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
+    const developerId = request.developer_id;
+
     try {
-      const developerId = request.developer_id;
-      const developer = await this.usecase.execute({ developerId });
+      const { id: publicationId } = getIdParamsSchema().parse(request.params);
 
-      if (!developer) {
-        return response.status(Status.NOT_FOUND).json({
-          data: new ErrorMessage(
-            `Developer with this ID doesn't exists`,
-            'error',
-          ),
-        });
-      }
-
-      return response.status(Status.OK).json({
-        data: {
-          developer: RenderDeveloper.one(developer),
-        },
+      await this.usecase.execute({
+        developerId,
+        publicationId,
       });
+
+      return response.status(Status.OK).send();
     } catch (err) {
       if (err instanceof ZodError) {
         const message = err.issues.map((issue) => issue.message).join(', ');
@@ -43,7 +36,7 @@ export class DeveloperMeController implements BaseController {
         const isServerError = error.message === 'Internal Server Error';
         const status = isServerError
           ? Status.INTERNAL_SERVER_ERROR
-          : Status.NOT_FOUND;
+          : Status.BAD_REQUEST;
 
         logger('error', error.message);
 

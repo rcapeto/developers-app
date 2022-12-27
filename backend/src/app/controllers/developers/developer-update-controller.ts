@@ -14,14 +14,13 @@ export class DeveloperUpdateController implements BaseController {
       const { old_password, new_password, name, techs, username } =
         request.body;
 
-      const avatarUrl = request.file?.filename ?? '';
-
-      const id = request.developer_id;
+      const avatar_url = request.file?.filename ?? '';
+      const developerId = request.developer_id;
 
       const developer = await this.usecase.execute({
-        developerId: id,
+        developerId,
         params: {
-          avatar_url: avatarUrl,
+          avatar_url,
           old_password,
           new_password,
           name,

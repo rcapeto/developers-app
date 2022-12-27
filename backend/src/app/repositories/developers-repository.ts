@@ -1,7 +1,4 @@
-import {
-  DeveloperBackend,
-  DeveloperFrontend,
-} from '@application/model/developer';
+import { DeveloperBackend } from '@application/model/developer';
 
 export interface GetDevelopersParams {
   perPage?: number;
@@ -13,7 +10,7 @@ export interface GetDevelopersResponse {
   perPage: number;
   page: number;
   totalPages: number;
-  developers: DeveloperFrontend[];
+  developers: DeveloperBackend[];
   count: number;
 }
 
@@ -33,7 +30,7 @@ export abstract class DevelopersRepository {
   abstract updateGithub(
     developerId: string,
     github: string,
-  ): Promise<DeveloperFrontend>;
+  ): Promise<DeveloperBackend>;
   abstract update(
     developerId: string,
     params?: Partial<UpdateDeveloperParams>,

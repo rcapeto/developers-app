@@ -1,39 +1,40 @@
 import { ZodError } from 'zod';
 import { ErrorMessage } from '@application/model/error';
-import { AllDeveloperPublicationsUsecase } from '@application/usecases/publications/developer-publications/developer-publications-usecase';
 import { Status } from '@common/enums';
 import { logger } from '@common/logger';
-import { getIdParamsSchema } from '@validation/id-params-validation';
 import { Request, Response } from 'express';
 import { BaseController } from '../base-controller';
+import { UpdatePublicationsUsecase } from '@application/usecases/publications/update/update-publication-usecase';
+import { getUpdatePublicationSchema } from '@validation/update-publication-schema-validation';
+import { getIdParamsSchema } from '@validation/id-params-validation';
 import { RenderPublication } from '@application/view/publications';
 
-export class AllDeveloperPublicationsController implements BaseController {
-  constructor(private usecase: AllDeveloperPublicationsUsecase) {}
+export class UpdatePublicationController implements BaseController {
+  constructor(private usecase: UpdatePublicationsUsecase) {}
 
   async handle(request: Request, response: Response) {
-    const page = +(request.query?.page ?? 1);
-    const perPage = +(request.query?.perPage ?? 10);
-
-    const { id: developerId } = getIdParamsSchema().parse(request.params);
+    const developerId = request.developer_id;
 
     try {
-      const data = await this.usecase.execute({
+      const { description, title } = getUpdatePublicationSchema().parse(
+        request.body,
+      );
+
+      const { id: publicationId } = getIdParamsSchema().parse(request.params);
+
+      const thumbnail = request.file?.filename ?? '';
+
+      const publication = await this.usecase.execute({
+        description,
         developerId,
-        params: {
-          perPage,
-          page,
-        },
+        publicationId,
+        title,
+        thumbnail,
       });
-
-      const { count, publications, ...rest } = data;
-
-      response.setHeader('X-TOTAL-COUNT', count);
 
       return response.status(Status.OK).json({
         data: {
-          ...rest,
-          publications: RenderPublication.many(publications),
+          publication: RenderPublication.one(publication),
         },
       });
     } catch (err) {
@@ -50,7 +51,7 @@ export class AllDeveloperPublicationsController implements BaseController {
         const isServerError = error.message === 'Internal Server Error';
         const status = isServerError
           ? Status.INTERNAL_SERVER_ERROR
-          : Status.NOT_FOUND;
+          : Status.BAD_REQUEST;
 
         logger('error', error.message);
 
