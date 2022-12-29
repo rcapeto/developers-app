@@ -117,11 +117,11 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
           id: developer.id,
         },
         data: {
-          avatar_url: params?.avatar_url ?? developer.avatar_url,
-          name: params?.name ?? developer.name,
-          techs: params?.techs ?? developer.techs,
-          username: changeFields.username ?? developer.username,
-          password: changeFields.password ?? developer.password,
+          avatar_url: params?.avatar_url || developer.avatar_url,
+          name: params?.name || developer.name,
+          techs: params?.techs || developer.techs,
+          username: changeFields.username || developer.username,
+          password: changeFields.password || developer.password,
         },
       });
 
