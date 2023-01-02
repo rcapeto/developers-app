@@ -2,9 +2,10 @@ import React from 'react';
 import { LoadingPage } from '../components/LoadingPage';
 import { useAccount } from '../hooks/useAccount';
 import { AuthenticationRoutes } from './authenticate-routes';
+import { AppRoutes } from './app/stack-routes';
 
 export default function Routes() {
-	const { checkingIfIsLogged } = useAccount();
+	const { checkingIfIsLogged, isLogged } = useAccount();
 
 	if(checkingIfIsLogged) {
 		return(
@@ -12,7 +13,5 @@ export default function Routes() {
 		);
 	}
 
-	return(
-		<AuthenticationRoutes />
-	);
+	return isLogged ? <AppRoutes /> : <AuthenticationRoutes />;
 }

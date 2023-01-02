@@ -38,6 +38,11 @@ export class DevelopersPrismaRepository implements DevelopersRepository {
                 contains: search,
               },
             },
+            {
+              username: {
+                contains: search,
+              },
+            },
           ],
         },
       })) as DeveloperBackend[];

@@ -12,3 +12,28 @@ export interface Developer {
    createdAt: string;
    techs: string;
 }
+
+export interface Publication {
+   developer: {
+      name: string;
+      github: string;
+      username: string;
+      avatar_url: {
+         origin: string;
+         mobile: string;
+         web: string;
+      }
+   }
+   comments: [];
+   createdAt: string;
+   description: string;
+   id: string;
+   likes: [];
+   editAt: string | null;
+   title: string;
+   thumbnail: {
+      origin: string;
+      mobile: string;
+      web: string;
+   }
+}

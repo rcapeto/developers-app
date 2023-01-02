@@ -10,14 +10,21 @@ const PORT = serverConfig.port;
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  serverConfig.uploads.developers,
-  express.static(path.join(__dirname, '..', serverConfig.uploads.developers)),
-);
 
 for (const route of routes) {
   app.use(route);
 }
+
+app.use(
+  '/uploads_developers',
+  express.static(path.join(__dirname, '..', 'uploads_developers')),
+);
+
+console.log(serverConfig.uploads.developers);
+app.use(
+  `/${serverConfig.uploads.publications}`,
+  express.static(path.join(__dirname, '..', serverConfig.uploads.publications)),
+);
 
 app.listen(PORT, listener(PORT));
 

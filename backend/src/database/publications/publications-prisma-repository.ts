@@ -93,6 +93,7 @@ export class PublicationsPrismaRepository implements PublicationsRepository {
               name: true,
               avatar_url: true,
               github: true,
+              username: true,
             },
           },
           comments: true,

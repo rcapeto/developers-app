@@ -4,14 +4,16 @@ import { useTheme } from '../../hooks/useTheme';
 const { colors } = useTheme();
 
 export default StyleSheet.create({
-	indicator: {
-		backgroundColor: colors.purple[300]
-	},
 	container: {
 		backgroundColor: colors.gray[600],
-	},
-	content: {
 		flex: 1,
-		alignItems: 'center',
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: 400,
+		padding: 20,
+		borderTopLeftRadius: 8,
+		borderTopRightRadius: 8,
 	},
 });

@@ -2,12 +2,13 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Poppins_400Regular, Poppins_700Bold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import { useFonts } from 'expo-font';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { QueryClientProvider } from 'react-query';
 
 import { LoadingPage } from './src/components/LoadingPage';
 import Routes from './src/routes';
 import { AccountContextProvider } from './src/contexts/account/AccountContext';
 import { ModalContextProvider } from './src/contexts/modal/ModalContext';
+import { client } from './src/config/react-query';
 
 export default function App() {
 	const [isFontsLoaded] = useFonts({
@@ -21,13 +22,13 @@ export default function App() {
 	}
 
 	return (
-		// <GestureHandlerRootView>
-		<ModalContextProvider>
-			<AccountContextProvider>
-				<StatusBar style="light" />
-				<Routes />
-			</AccountContextProvider>
-		</ModalContextProvider>
-		// </GestureHandlerRootView>
+		<QueryClientProvider client={client}>
+			<ModalContextProvider>
+				<AccountContextProvider>
+					<StatusBar style="light" />
+					<Routes />
+				</AccountContextProvider>
+			</ModalContextProvider>
+		</QueryClientProvider>
 	);
 }

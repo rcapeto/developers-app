@@ -1,6 +1,11 @@
 import { useReducer } from 'react';
 import { Developer } from '../../types/entitys';
 
+export enum AccountReducerTypes {
+	UPDATE_DEVELOPER = 'UPDATE_DEVELOPER',
+	TOGGLE_LOADING = 'TOGGLE_LOADING',
+	TOGGLE_CHECKING_IF_IS_LOGGED = 'TOGGLE_CHECKING_IF_IS_LOGGED',
+}
 export interface AccountReducerState {
    developer: Developer | null;
    isLoading: boolean;
@@ -8,9 +13,9 @@ export interface AccountReducerState {
 }
 
 type AccountReducerActions = 
-   { type: 'UPDATE_DEVELOPER', payload: { developer: Developer } } |
-   { type: 'TOGGLE_LOADING' } |
-   { type: 'TOGGLE_CHECKING_IF_IS_LOGGED' }
+   { type: AccountReducerTypes.UPDATE_DEVELOPER, payload: { developer: Developer | null } } |
+   { type: AccountReducerTypes.TOGGLE_LOADING } |
+   { type: AccountReducerTypes.TOGGLE_CHECKING_IF_IS_LOGGED }
 
 const initialReducer: AccountReducerState = {
 	developer: null,
@@ -20,17 +25,17 @@ const initialReducer: AccountReducerState = {
 
 function reducer(state: AccountReducerState, action: AccountReducerActions) {
 	switch(action.type) {
-	case 'UPDATE_DEVELOPER':
+	case AccountReducerTypes.UPDATE_DEVELOPER:
 		return {
 			...state,
 			developer: action.payload.developer
 		};
-	case 'TOGGLE_LOADING':
+	case AccountReducerTypes.TOGGLE_LOADING:
 		return {
 			...state,
 			isLoading: !state.isLoading
 		};
-	case 'TOGGLE_CHECKING_IF_IS_LOGGED':
+	case AccountReducerTypes.TOGGLE_CHECKING_IF_IS_LOGGED:
 		return {
 			...state,
 			checkingIfIsLogged: !state.checkingIfIsLogged

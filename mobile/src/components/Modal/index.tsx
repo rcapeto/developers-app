@@ -1,27 +1,40 @@
-import React, { useRef } from 'react';
-import { View, Text } from 'react-native';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import React, { forwardRef, ForwardRefRenderFunction, ReactNode, useImperativeHandle, useState } from 'react';
+import { Modal as ModalNative, View } from 'react-native';
+import { LoginError } from '../Error/LoginError';
 
 import styles from './styles';
 
-export function Modal() {
-	const bottomSheetRef = useRef<BottomSheet>(null);
-
-	return(
-		<BottomSheet
-			ref={bottomSheetRef}
-			index={1}
-			snapPoints={[200, '50%']}
-			handleHeight={300}
-			contentHeight={300}
-			animateOnMount={true}
-			enablePanDownToClose
-			handleIndicatorStyle={styles.indicator}
-			backgroundStyle={styles.container}
-		>
-			<View style={styles.content}>
-				<Text>Awesome 🎉</Text>
-			</View>
-		</BottomSheet>
-	);
+export interface ModalActions {
+	openModal: () => void;
+	closeModal: () => void;
+	changeContent: (content: ReactNode) => void;
 }
+
+const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
+	const [visible, setVisible] = useState(false);
+	const [content, setContent] = useState<ReactNode>();
+
+	useImperativeHandle(ref, () => {
+		return {
+			changeContent: setContent,
+			closeModal: () => setVisible(false),
+			openModal: () => setVisible(true)
+		};
+	});
+	
+	return(
+		<ModalNative
+			transparent
+			animationType="slide"
+			visible={visible}
+			collapsable
+		>
+			<View style={styles.container}>
+				{ content }
+			</View>
+		</ModalNative>
+	);
+};
+
+
+export default forwardRef(Modal);

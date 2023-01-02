@@ -31,7 +31,7 @@ const loginSchema = yup.object().shape({
 
 export default function Login() {
 	const navigation = useNavigation();
-	const { login } = useAccount();
+	const { login, isLoading } = useAccount();
 
 	const { control, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
@@ -101,6 +101,8 @@ export default function Login() {
 					<Button 
 						text='Entrar' 
 						onPress={handleSubmit(handleLogin)}
+						isLoading={isLoading}
+						disabled={isLoading}
 					/>
 					<Button 
 						text="Não possui conta? Cadastre-se"

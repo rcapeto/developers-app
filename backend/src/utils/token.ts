@@ -8,7 +8,7 @@ export class Token {
   static create(developerId: string, username: string, expires?: string) {
     const token = sign({ username }, Token.secret_key, {
       subject: developerId,
-      expiresIn: expires ?? '1d',
+      expiresIn: expires ?? '7d',
     });
 
     return token;

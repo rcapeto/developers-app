@@ -14,7 +14,15 @@ export interface ButtonProps extends TouchableOpacityProps {
 }
 
 export function Button(props: ButtonProps) {
-	const { text, leftIcon, rightIcon, isLoading, type, ...rest } = props;
+	const { 
+		text, 
+		leftIcon, 
+		rightIcon, 
+		isLoading, 
+		type, 
+		style, 
+		...rest 
+	} = props;
 
 	const isDisabled = rest.disabled;
 	const isOutlined = type === 'outlined';
@@ -34,9 +42,9 @@ export function Button(props: ButtonProps) {
 	}, [type, isDisabled, isOutlined]);
 
 	return(
-		<TouchableOpacity {...rest} style={buttonStyles}>
+		<TouchableOpacity {...rest} style={[buttonStyles, style]}>
 			{
-				isLoading ? (<Loading />) : (
+				isLoading ? (<Loading spinnerColor="white"/>) : (
 					<View style={[styles.content, isOutlined ? styles.contentOutlined : undefined]}>
 						<RenderValidation validation={!!leftIcon}>
 							<View style={styles.icon}>

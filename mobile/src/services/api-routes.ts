@@ -4,6 +4,10 @@ export const apiRoutes = {
 		login: '/account/login'
 	},
 	developer: {
-		me: '/developer/me'
+		me: '/developer/me',
+		all: '/developers',
 	},
+	publication: {
+		all: '/publications'
+	}
 };

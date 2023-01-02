@@ -8,4 +8,5 @@ interface LoginFunctionParams {
 export interface AccountContextValues extends AccountReducerState {
    isLogged: boolean;
    login(params: LoginFunctionParams): Promise<void>;
+   logout() : void;
 }
