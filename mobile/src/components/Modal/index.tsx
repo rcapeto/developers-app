@@ -1,27 +1,40 @@
-import React, { forwardRef, ForwardRefRenderFunction, ReactNode, useImperativeHandle, useState } from 'react';
+import React, { 
+	cloneElement,
+	forwardRef, 
+	ForwardRefRenderFunction, 
+	FunctionComponent, 
+	ReactNode, 
+	useImperativeHandle, 
+	useMemo, 
+	useState 
+} from 'react';
 import { Modal as ModalNative, View } from 'react-native';
-import { LoginError } from '../Error/LoginError';
+import { OpenModalConfig } from '../../contexts/modal/ModalContext';
 
 import styles from './styles';
 
 export interface ModalActions {
-	openModal: () => void;
+	openModal: (config: OpenModalConfig) => void;
 	closeModal: () => void;
-	changeContent: (content: ReactNode) => void;
 }
 
 const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
 	const [visible, setVisible] = useState(false);
 	const [content, setContent] = useState<ReactNode>();
 
+	function openModal(config: OpenModalConfig) {
+		const Component = config.component;
+		setContent(<Component {...config.passProps}/>);
+		setVisible(true);
+	}
+	function closeModal() {
+		setContent(undefined);
+		setVisible(false);
+	}
+
 	useImperativeHandle(ref, () => {
-		return {
-			changeContent: setContent,
-			closeModal: () => setVisible(false),
-			openModal: () => setVisible(true)
-		};
+		return { closeModal, openModal };
 	});
-	
 	return(
 		<ModalNative
 			transparent

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { 
@@ -24,30 +24,35 @@ export function DeveloperItem({ developer }: Props) {
 	const navigation = useNavigation();
 	const imageURL = isAndroid ? developer.avatar_url.web : developer.avatar_url.mobile;
 
-	console.log(imageURL);
+	const handleNavigateDeveloperScreen = useCallback(() => {
+		navigation.navigate('developerDetail', { 
+			id: developer.id,
+		});
+	}, [navigation]);
 
 	return(
-		<View style={styles.container}>
-			<Image 
-				source={{ uri: imageURL || emptyImage }}
-				style={styles.image}
-			/>
+		<TouchableOpacity onPress={handleNavigateDeveloperScreen}>
+			<View style={styles.container}>
+				<Image 
+					source={{ uri: imageURL || emptyImage }}
+					style={styles.image}
+				/>
 
-			<View style={styles.info}>
-				<Text style={styles.name}>{developer.name}</Text>
+				<View style={styles.info}>
+					<Text style={styles.name}>{developer.name}</Text>
 
-				<RenderValidation validation={developer.github.length > 0}>
-					<Text style={styles.github}>
-						<Feather 
-							name="github" 
-							size={fontSize.sm} 
-							color={colors.purple[300]}
-						/>
-						{' '} { developer.github }
-					</Text>
-				</RenderValidation>
-
+					<RenderValidation validation={developer.github.length > 0}>
+						<Text style={styles.github}>
+							<Feather 
+								name="github" 
+								size={fontSize.sm} 
+								color={colors.purple[300]}
+							/>
+							{' '} { developer.github }
+						</Text>
+					</RenderValidation>
+				</View>
 			</View>
-		</View>
+		</TouchableOpacity>
 	);
 }

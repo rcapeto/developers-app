@@ -7,7 +7,10 @@ export declare global {
          search: undefined;
          home: undefined;
          profile: undefined;
-         newPublication: string;
+         newPublication: undefined;
+         developerDetail: {
+            id: string;
+         }
       }
    }
 }

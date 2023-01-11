@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Alert, ScrollView, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,6 +10,8 @@ import { Input, InputProps } from '../../../components/Input';
 import styles from './styles';
 import { Button } from '../../../components/Button';
 import { useTheme } from '../../../hooks/useTheme';
+import appConfig from '../../../config/app';
+import { useAccount } from '../../../hooks/useAccount';
 
 interface FormValues {
 	username: string;
@@ -32,6 +35,10 @@ const registerSchema = yup.object().shape({
 const { isAndroid } = useTheme();
 
 export default function Register() {
+	const { register } = useAccount();
+	const navigation = useNavigation();
+
+	const [errorCreatePassword, setErrorCreatePassword] = useState(false);
 	const { handleSubmit, formState: { errors }, control } = useForm({
 		defaultValues: {
 			name: '',
@@ -43,7 +50,17 @@ export default function Register() {
 	});
 
 	async function handleRegister(values: FormValues) {
-		console.log(values);
+		if(errorCreatePassword) {
+			return Alert.alert(
+				appConfig.teamName, 
+				'Notamos que sua senha não possui os requisitos de segurança, por favor modifique sua senha para realizar o cadastro',
+				[],
+				{
+					userInterfaceStyle: 'dark'
+				}
+			);
+		}
+		await register(values);
 	}
 
 	const inputs = useMemo<InputProps[]>(() => {
@@ -51,7 +68,7 @@ export default function Register() {
 			{
 				name: 'name',
 				label: 'Digite o seu nome',
-				autoCapitalize: 'words',
+				autoCapitalize: 'none',
 			},
 			{
 				name: 'username',
@@ -64,6 +81,9 @@ export default function Register() {
 				isPassword: true,
 				showPasswordHelp: true,
 				autoCorrect: false,
+				onErrorValidation: function(error) {
+					setErrorCreatePassword(error);
+				}
 			},
 			{
 				name: 'confirm_password',
@@ -79,6 +99,7 @@ export default function Register() {
 			<ScrollView 
 				style={styles.container} 
 				contentInset={{ bottom: !isAndroid ? 75 : 0 }}
+				showsVerticalScrollIndicator={false}
 			>
 				{
 					inputs.map(input => (

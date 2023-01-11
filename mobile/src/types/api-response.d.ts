@@ -48,3 +48,15 @@ export interface IAppDataResponsePublications {
       publications: Publication[];
    }
 }
+
+export interface IRegisterResponse {
+   data: {
+      error: boolean;
+      message: string;
+      cause: string;
+   }
+}
+
+export interface IDeveloperMeResponse {
+   data: {}
+}

@@ -5,13 +5,19 @@ import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 import { useTheme } from '../../hooks/useTheme';
 import { Button } from '../Button';
-const { colors } = useTheme();
 
-interface ServerErrorProps {
-	onCloseModal?: () => void;
+interface RegisterErrorProps {
+	onCloseModal: () => void;
+   errorMessage: string;
 }
 
-export function ServerError(props: ServerErrorProps) {
+const { colors } = useTheme();
+
+export function RegisterError(props: RegisterErrorProps) {
+	const errorHasDeveloper = 'There is already a developer with this username';
+	const hasDeveloper = props.errorMessage === errorHasDeveloper;
+	const message = hasDeveloper ? 'Já existe um usuário com esse usuário' : 'Por favor preencha todos os campos corretamente.';
+
 	return(
 		<View style={styles.errorContainer}>
 			<Feather 
@@ -21,7 +27,7 @@ export function ServerError(props: ServerErrorProps) {
 			/>
 
 			<Text style={styles.errorMessage}>
-				Ops! Error interno no servidor, por favor tente novamente! 😀
+				{message}
 			</Text>
 
 			<Button

@@ -1,10 +1,11 @@
-import React, { createContext, ReactNode, useRef } from 'react';
+import React, { createContext, FunctionComponent, PureComponent, useRef } from 'react';
 
 import Modal, { ModalActions } from '../../components/Modal';
 import { WithChildren } from '../../types/children';
 
-interface OpenModalConfig {
-	component: ReactNode;
+export interface OpenModalConfig {
+	component: FunctionComponent;
+	passProps? : Record<string, unknown>;
 }
 
 interface ModalContextValues {
@@ -19,8 +20,7 @@ export function ModalContextProvider({ children }: WithChildren) {
 
 	function openModal(config: OpenModalConfig) {
 		if(modalRef.current) {
-			modalRef.current.openModal();
-			modalRef.current.changeContent(config.component);
+			modalRef.current.openModal(config);
 		}
 	}
 

@@ -4,18 +4,16 @@ import { Feather } from '@expo/vector-icons';
 
 import styles from './styles';
 import { useTheme } from '../../hooks/useTheme';
-import { useModal } from '../../hooks/useModal';
 import { Button } from '../Button';
 
 interface LoginErrorProps {
    errorMessage: string;
+	onCloseModal: () => void;
 }
 
 const { colors } = useTheme();
 
 export function LoginError(props: LoginErrorProps) {
-	const { closeModal } = useModal();
-
 	const hasUser = !props.errorMessage.includes('register');
 
 	const message = hasUser ? 
@@ -38,7 +36,7 @@ export function LoginError(props: LoginErrorProps) {
 			<Button
 				text='OK!'
 				style={styles.buttonClose}
-				onPress={closeModal}
+				onPress={props.onCloseModal}
 			/>
 		</View>
 	);
