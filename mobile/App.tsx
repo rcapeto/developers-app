@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { LoadingPage } from './src/components/LoadingPage';
 import Routes from './src/routes';
 import { AccountContextProvider } from './src/contexts/account/AccountContext';
-import { ModalContextProvider } from './src/contexts/modal/ModalContext';
+import { AppNavigationProvider } from './src/contexts/app-navigation/AppNavigationContext';
 import { client } from './src/config/react-query';
 
 export default function App() {
@@ -25,12 +25,12 @@ export default function App() {
 	return (
 		<QueryClientProvider client={client}>
 			<NavigationContainer>
-				<ModalContextProvider>
+				<AppNavigationProvider>
 					<AccountContextProvider>
 						<StatusBar style="light" />
 						<Routes />
 					</AccountContextProvider>
-				</ModalContextProvider>
+				</AppNavigationProvider>
 			</NavigationContainer>
 		</QueryClientProvider>
 	);

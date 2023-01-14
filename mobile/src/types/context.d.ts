@@ -1,3 +1,6 @@
+import { FunctionComponent } from 'react';
+import { AlertButton, AlertOptions } from 'react-native';
+import { ModalOpenConfig } from '../components/Modal';
 import { AccountReducerState } from '../contexts/account/AccountReducer';
 
 export interface LoginFunctionParams {
@@ -19,3 +22,21 @@ export interface AccountContextValues extends AccountReducerState {
    register(params: RegisterFuncionParams): Promise<void>;
    me(): Promise<void>;
  }
+export interface AppNavigationState {
+   Component?: FunctionComponent;
+   title?: string;
+   passProps?: Record<string, string>;
+}
+
+export interface ShowAlertConfig {
+   message: string;
+   buttons: AlertButton[];
+   options: AlertOptions;
+}
+
+export interface AppNavigationContextValues {
+   push: (config: AppNavigationState) => void;
+   openDialogBottom: (config: Partial<ModalOpenConfig>) => void;
+   closeDialogBottom: () => void;
+   showAlert: (config: Partial<ShowAlertConfig>) => void;
+}

@@ -8,8 +8,6 @@ export function unauthorizedLogout(logout: () => void) {
 		appConfig.teamName,
 		message,
 		[{ onPress: logout, style: 'cancel'}],
-		{
-			userInterfaceStyle: 'dark'
-		}
+		{ userInterfaceStyle: 'dark' }
 	);
 }

@@ -1,9 +1,10 @@
-import React, { createContext, FunctionComponent, useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import { LoginError }  from '../../components/Error/LoginError';
 import { ServerError }  from '../../components/Error/ServerError';
-import { useModal } from '../../hooks/useModal';
 import api, { setHeaderAPI } from '../../services/api';
 import { apiRoutes } from '../../services/api-routes';
 import { ICheckDeveloperResponse, IDeveloperMeResponse, ILoginResponse, IRegisterResponse } from '../../types/api-response';
@@ -13,13 +14,17 @@ import { useAccountReducer, AccountReducerTypes } from './AccountReducer';
 import { asyncStorageConfig } from '../../config/async-storage';
 import { unauthorizedLogout } from '../../utils/invalid-token-logout';
 import { RegisterError } from '../../components/Error/RegisterError';
-import { RegisterSuccess } from '../../components/Success/RegisterSuccess';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
+import { useTheme } from '../../hooks/useTheme';
 
 export const AccountContext = createContext({} as AccountContextValues);
 
+const { colors } = useTheme();
+
 export function AccountContextProvider({ children }: WithChildren) {
 	const [state, dispatch] = useAccountReducer();
-	const { openModal, closeModal } = useModal();
+	const appNavigation = useAppNavigation();
+	const navigation = useNavigation();
 
 	async function me() {
 		try {
@@ -38,13 +43,14 @@ export function AccountContextProvider({ children }: WithChildren) {
 				}
 			}
 
-			return openModal({
-				component: ServerError as FunctionComponent,
+			return appNavigation.openDialogBottom({
+				Component: ServerError,
+				isError: true,
 				passProps: {
-					onCloseModal: closeModal
+					onCloseModal: appNavigation.closeDialogBottom,
 				}
-				
 			});
+
 		} finally {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 		}
@@ -57,11 +63,11 @@ export function AccountContextProvider({ children }: WithChildren) {
 			const { data: response } = await api.post<ILoginResponse>(apiRoutes.account.login, params);
 
 			if(response.data.error) {
-				return openModal({
-					component: LoginError as any,
+				return appNavigation.openDialogBottom({
+					Component: LoginError,
 					passProps: {
 						errorMessage: response.data.message,
-						onCloseModal: closeModal
+						onCloseModal: appNavigation.closeDialogBottom,
 					}
 				});
 			}
@@ -71,12 +77,11 @@ export function AccountContextProvider({ children }: WithChildren) {
 			await handleCheckDeveloper(token);
 
 		} catch(err) {
-			return openModal({
-				component: ServerError as FunctionComponent,
+			return appNavigation.openDialogBottom({
+				Component: ServerError,
 				passProps: {
-					onCloseModal: closeModal
+					onCloseModal: appNavigation.closeDialogBottom,
 				}
-				
 			});
 		}	finally {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
@@ -91,31 +96,33 @@ export function AccountContextProvider({ children }: WithChildren) {
 
 
 			if(status === 201 && !response) {
-				return openModal({
-					component: RegisterSuccess as FunctionComponent,
-					passProps: {
-						onCloseModal: closeModal
-					}
+				appNavigation.openDialogBottom({
+					title: 'Usuário cadastrado com sucesso!',
+					showButton: true,
+					isSuccess: true,
+					buttonText: 'Ok!',
+					icon: <AntDesign name="checkcircle" color={colors.green[500]} size={40} />,
 				});
+
+				return navigation.navigate('login');
 			}
 
 			if(response && response.data.error && response.data.message) {
-				return openModal({
-					component: RegisterError as FunctionComponent,
+				return appNavigation.openDialogBottom({
+					Component: RegisterError,
 					passProps: {
-						onCloseModal: closeModal,
+						onCloseModal: appNavigation.closeDialogBottom,
 						errorMessage: response.data.message
 					}
 				});
 			} 
 
 		} catch(err) {
-			return openModal({
-				component: ServerError as FunctionComponent,
+			return appNavigation.openDialogBottom({
+				Component: ServerError,
 				passProps: {
-					onCloseModal: closeModal
+					onCloseModal: appNavigation.closeDialogBottom,
 				}
-				
 			});
 		} finally {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
@@ -160,10 +167,10 @@ export function AccountContextProvider({ children }: WithChildren) {
 		} catch(err) {
 			AsyncStorage.removeItem(asyncStorageConfig.token);
 
-			return openModal({
-				component: ServerError as FunctionComponent,
+			return appNavigation.openDialogBottom({
+				Component: ServerError,
 				passProps: {
-					onCloseModal: closeModal
+					onCloseModal: appNavigation.closeDialogBottom,
 				}
 			});
 		}

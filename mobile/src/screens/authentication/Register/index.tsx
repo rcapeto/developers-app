@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -10,8 +10,8 @@ import { Input, InputProps } from '../../../components/Input';
 import styles from './styles';
 import { Button } from '../../../components/Button';
 import { useTheme } from '../../../hooks/useTheme';
-import appConfig from '../../../config/app';
 import { useAccount } from '../../../hooks/useAccount';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
 
 interface FormValues {
 	username: string;
@@ -36,6 +36,7 @@ const { isAndroid } = useTheme();
 
 export default function Register() {
 	const { register } = useAccount();
+	const appNavigation = useAppNavigation();
 	const navigation = useNavigation();
 
 	const [errorCreatePassword, setErrorCreatePassword] = useState(false);
@@ -51,14 +52,12 @@ export default function Register() {
 
 	async function handleRegister(values: FormValues) {
 		if(errorCreatePassword) {
-			return Alert.alert(
-				appConfig.teamName, 
-				'Notamos que sua senha não possui os requisitos de segurança, por favor modifique sua senha para realizar o cadastro',
-				[],
-				{
-					userInterfaceStyle: 'dark'
-				}
-			);
+			const message = 'Notamos que sua senha não possui os requisitos de segurança, por favor modifique sua senha para realizar o cadastro';
+
+			return appNavigation.showAlert({
+				message,
+				options: { userInterfaceStyle: 'dark' },
+			});
 		}
 		await register(values);
 	}

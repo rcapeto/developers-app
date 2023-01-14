@@ -4,8 +4,9 @@ import { RefreshControl } from 'react-native-gesture-handler';
 
 import { ServerError } from '../../../../../components/Error/ServerError';
 import { Loading } from '../../../../../components/Loading';
+import { RenderValidation } from '../../../../../components/RenderValidation';
 import { useAccount } from '../../../../../hooks/useAccount';
-import { useModal } from '../../../../../hooks/useModal';
+import { useAppNavigation  } from '../../../../../hooks/useAppNavigation';
 import { useTheme } from '../../../../../hooks/useTheme';
 import { Developer } from '../../../../../types/entitys';
 import { DeveloperItem } from './components/Developer';
@@ -23,7 +24,7 @@ export function DevelopersList({ search }: ListProps) {
 	const [data, setData] = useState<Developer[]>([]);
 
 	const { logout } = useAccount();
-	const { openModal, closeModal } = useModal();
+	const appNavigation = useAppNavigation();
 
 	const { isLoading, data: queryResponse, isFetching } = useDevelopersList({
 		logout,
@@ -37,10 +38,10 @@ export function DevelopersList({ search }: ListProps) {
 	}, [queryResponse]);
 
 	function handleError() {
-		openModal({
-			component: ServerError,
+		appNavigation.openDialogBottom({
+			Component: ServerError,
 			passProps: {
-				onCloseModal: closeModal
+				onCloseModal: appNavigation.closeDialogBottom
 			}
 		});
 	}
@@ -56,7 +57,6 @@ export function DevelopersList({ search }: ListProps) {
 	function onRefresh() {
 		setRefreshing(true);
 		setData([]);
-		setPage(1);
 		setRefreshing(false);
 	}
 
@@ -71,10 +71,10 @@ export function DevelopersList({ search }: ListProps) {
 	useEffect(() => {
 		if(queryResponse?.response.data.developers) {
 			const developers = queryResponse.response.data.developers ?? [];
-			console.log('developers', developers.length);
-			setData(state => [...state, ...developers]);
+			const isFirstPage = page === 1;
+			setData(state => !isFirstPage ? [...state, ...developers] : developers);
 		}
-	}, [queryResponse]);
+	}, [queryResponse, page]);
 
 	return(
 		<FlatList 
@@ -93,12 +93,10 @@ export function DevelopersList({ search }: ListProps) {
 			onEndReached={handleEndReached}
 			showsVerticalScrollIndicator={false}
 			ListFooterComponent={() => (
-				<>
-					{
-						isLoading || isFetching && (
-							<Loading style={styles.mt20}/>)
-					}
-				</>
+				<RenderValidation validation={isLoading || isFetching}>
+					<Loading style={styles.mt20}/>
+				</RenderValidation>
+					
 			)}
 		/>
 	);
