@@ -5,12 +5,14 @@ import { Loading } from '../Loading';
 import { RenderValidation } from '../RenderValidation';
 import styles from './styles';
 
+export type ButtonType = 'outlined' | 'error-button' | 'success-button';
+
 export interface ButtonProps extends TouchableOpacityProps {
    text: string;
    leftIcon?: ReactNode;
    rightIcon?: ReactNode;
    isLoading?: boolean;
-   type?: 'outlined' | 'button';
+   type?: ButtonType;
 }
 
 export function Button(props: ButtonProps) {
@@ -24,10 +26,11 @@ export function Button(props: ButtonProps) {
 		...rest 
 	} = props;
 
-	const isDisabled = rest.disabled;
-	const isOutlined = type === 'outlined';
-
 	const buttonStyles = useMemo(() => {
+		const isDisabled = rest.disabled;
+		const isOutlined = type === 'outlined';
+		const isSuccess = type === 'success-button';
+		const isError = type === 'error-button';
 		const style: StyleProp<ViewStyle> = [styles.button];
       
 		if(isDisabled) {
@@ -38,8 +41,20 @@ export function Button(props: ButtonProps) {
 			style.push(styles.outlined);
 		}
 
+		if(isError) {
+			style.push(styles.buttonError);
+		}
+
+		if(isSuccess) {
+			style.push(styles.buttonSuccess);
+		}
+
 		return style;
-	}, [type, isDisabled, isOutlined]);
+	}, [type, rest.disabled]);
+
+	const isOutlined = useMemo(() => {
+		return type === 'outlined';
+	}, [type]);
 
 	return(
 		<TouchableOpacity {...rest} style={[buttonStyles, style]}>

@@ -64,9 +64,7 @@ export default function Search() {
 			</View>
 
 			<RenderValidation validation={activeButton === 0}>
-				<DevelopersList
-					search={search}
-				/>
+				<DevelopersList search={search} />
 			</RenderValidation>
 		</Layout>
 	);

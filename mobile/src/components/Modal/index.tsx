@@ -6,10 +6,11 @@ import React, {
 	useCallback,
 	useImperativeHandle,
 	useMemo,
+	useRef,
 	useState, 
 } from 'react';
-import { Modal as ModalNative, StyleProp, TextStyle, View, Text, ViewStyle } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Modal as ModalNative, StyleProp, TextStyle, View, Text } from 'react-native';
+import { Button, ButtonType } from '../Button';
 import { RenderValidation } from '../RenderValidation';
 
 import styles from './styles';
@@ -24,6 +25,7 @@ export interface ModalOpenConfig {
 	icon: React.ReactNode;
 	showButton: boolean;
 	buttonText: string;
+	onCloseCallback: () => void;
 }
 export interface ModalActions {
 	onOpen: (config: Partial<ModalOpenConfig>) => void;
@@ -33,15 +35,26 @@ export interface ModalActions {
 const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
 	const [state, setState] = useState<Partial<ModalOpenConfig>>({});
 	const [visible, setVisible] = useState(false);
+	const closeCallback = useRef<CallableFunction | null>(null);
 
 	function onOpen(config: Partial<ModalOpenConfig>) {
 		setState(config);
 		setVisible(true);
+
+		if(config.onCloseCallback) {
+			closeCallback.current = config.onCloseCallback;
+		}
+	}
+
+	function dispatchCloseCallback() {
+		closeCallback.current?.();
+		closeCallback.current = null;
 	}
 
 	function onClose() {
 		setState({});
 		setVisible(false);
+		dispatchCloseCallback();
 	}
 
 	useImperativeHandle(ref, () => {
@@ -67,19 +80,13 @@ const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
 
 	}, [state]);
 
-	const buttonStyles = useMemo(() => {
-		const style: StyleProp<ViewStyle>[] = [styles.button];
-
+	const buttonType = useMemo<ButtonType | undefined>(() => {
 		if(state.isError) {
-			style.push(styles.buttonError);
+			return 'error-button';
+		} else if(state.isSuccess) {
+			return 'success-button';
 		}
-
-		if(state.isSuccess) {
-			style.push(styles.buttonSuccess);
-		}
-
-		return style;
-
+		return undefined;
 	}, [state]);
 
 	const { Component } = state;
@@ -107,11 +114,12 @@ const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
 				</RenderValidation>
 
 				<RenderValidation validation={!!state.showButton}>
-					<TouchableOpacity onPress={onClose} style={buttonStyles}>
-						<RenderValidation validation={!!state.buttonText}>
-							<Text style={styles.buttonText}>{state.buttonText}</Text>
-						</RenderValidation>
-					</TouchableOpacity>
+					<Button 
+						text={state.buttonText ?? ''}
+						onPress={onClose}
+						style={styles.button}
+						type={buttonType}
+					/>
 				</RenderValidation>
 			</View>
 		</ModalNative>

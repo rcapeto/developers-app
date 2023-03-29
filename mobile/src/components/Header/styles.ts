@@ -10,7 +10,7 @@ export default StyleSheet.create({
 		backgroundColor: colors.gray[800],
 		flexDirection: 'row',
 		paddingHorizontal: 30,
-		paddingTop: isAndroid ? 20 : 50,
+		paddingTop: isAndroid ? 30 : 50,
 		paddingBottom: 20,
 	},
 	empty: {

@@ -39,4 +39,10 @@ export default StyleSheet.create({
 		borderColor: colors.purple[300],
 		padding: 5,
 	},
+	buttonError: {
+		backgroundColor: colors.red[500],
+	},
+	buttonSuccess: {
+		backgroundColor: colors.green[500],
+	},
 });

@@ -37,6 +37,7 @@ export function LoginError(props: LoginErrorProps) {
 				text='OK!'
 				style={styles.buttonClose}
 				onPress={props.onCloseModal}
+				type="error-button"
 			/>
 		</View>
 	);

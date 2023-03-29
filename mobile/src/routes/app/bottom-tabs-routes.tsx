@@ -9,7 +9,7 @@ import NewPublication from '~/screens/app/NewPublication';
 
 import { useTheme } from '~/hooks/useTheme';
 
-const { colors, fontSize } = useTheme();
+const { colors, fontSize, isAndroid } = useTheme();
 const { Navigator, Screen } = createBottomTabNavigator();
 
 export function BottomTabsRoutes() {
@@ -22,9 +22,12 @@ export function BottomTabsRoutes() {
 				tabBarActiveTintColor: colors.purple[300],
 				tabBarInactiveTintColor: colors.gray[300],
 				tabBarStyle: {
-					height: 90,
-					borderTopWidth: 0,
 					backgroundColor: colors.gray[800],
+					borderTopWidth: 0,
+					height: isAndroid ? 65 : 90
+				},
+				tabBarLabelStyle: {
+					padding: isAndroid ? 10 : 0,
 				},
 			}}
 		>

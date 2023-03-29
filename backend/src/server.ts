@@ -20,7 +20,6 @@ app.use(
   express.static(path.join(__dirname, '..', 'uploads_developers')),
 );
 
-console.log(serverConfig.uploads.developers);
 app.use(
   `/${serverConfig.uploads.publications}`,
   express.static(path.join(__dirname, '..', serverConfig.uploads.publications)),

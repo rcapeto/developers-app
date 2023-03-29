@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from '~/hooks/useTheme';
 
-const { colors, fontFamily, fontSize } = useTheme();
+const { colors, fontFamily, fontSize, isAndroid } = useTheme();
 
 export default StyleSheet.create({
 	container: {
@@ -11,10 +11,10 @@ export default StyleSheet.create({
 		bottom: 0,
 		left: 0,
 		right: 0,
-		height: 400,
 		padding: 20,
 		borderTopLeftRadius: 8,
 		borderTopRightRadius: 8,
+		paddingBottom: isAndroid ? 20 : 30,
 	},
 	iconContainer: {
 		alignSelf: 'center',
@@ -27,7 +27,7 @@ export default StyleSheet.create({
 		marginTop: 20,
 	},
 	description: {
-		marginTop: 20,
+		marginTop: 5,
 		fontSize: fontSize.sm,
 		fontFamily: fontFamily.body,
 		textAlign: 'center',
@@ -40,22 +40,6 @@ export default StyleSheet.create({
 		color: colors.red[500],
 	},
 	button: {
-		backgroundColor: colors.purple[300],
-		alignItems: 'center',
-		justifyContent: 'center',
 		marginTop: 20,
-		borderRadius: 8,
-		padding: 16,
-	},
-	buttonError: {
-		backgroundColor: colors.red[500],
-	},
-	buttonSuccess: {
-		backgroundColor: colors.green[500],
-	},
-	buttonText: {
-		color: colors.white,
-		fontFamily: fontFamily.medium,
-		fontSize: fontSize.md,
-	},
+	}
 });

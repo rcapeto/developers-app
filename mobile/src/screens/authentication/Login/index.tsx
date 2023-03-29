@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Controller, useForm,  } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -75,10 +75,11 @@ export default function Login() {
 			<SectionTitle text="Entrar"/>
 
 			<View style={styles.form}>
-				{
-					inputs.map(input => (
+				<FlatList 
+					data={inputs}
+					keyExtractor={input => input.name}
+					renderItem={({ item: input }) => (
 						<Controller
-							key={input.name}
 							control={control}
 							rules={{
 								required: true,
@@ -94,8 +95,8 @@ export default function Login() {
 								/>
 							)}
 						/>
-					))
-				}
+					)}
+				/>
 
 				<View style={styles.buttonContainer}>
 					<Button 

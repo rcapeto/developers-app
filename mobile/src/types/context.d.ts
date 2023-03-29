@@ -22,12 +22,7 @@ export interface AccountContextValues extends AccountReducerState {
    register(params: RegisterFuncionParams): Promise<void>;
    me(): Promise<void>;
  }
-export interface AppNavigationState {
-   Component?: FunctionComponent;
-   title?: string;
-   passProps?: Record<string, string>;
-}
-
+ 
 export interface ShowAlertConfig {
    message: string;
    buttons: AlertButton[];
@@ -35,7 +30,6 @@ export interface ShowAlertConfig {
 }
 
 export interface AppNavigationContextValues {
-   push: (config: AppNavigationState) => void;
    openDialogBottom: (config: Partial<ModalOpenConfig>) => void;
    closeDialogBottom: () => void;
    showAlert: (config: Partial<ShowAlertConfig>) => void;

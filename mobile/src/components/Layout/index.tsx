@@ -1,5 +1,12 @@
 import React, { useMemo } from 'react';
-import { StyleProp, View, ViewStyle, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import { 
+	StyleProp, 
+	View, 
+	ViewStyle, 
+	Keyboard, 
+	TouchableWithoutFeedback, 
+	KeyboardAvoidingView 
+} from 'react-native';
 import { useTheme } from '~/hooks/useTheme';
 import { WithChildren } from '~/types/children';
 import { type HeaderProps, Header } from '../Header';

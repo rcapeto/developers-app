@@ -1,5 +1,3 @@
-import { AppNavigationState } from './context';
-
 export declare global {
    namespace ReactNavigation {
       interface RootParamList {
@@ -13,7 +11,6 @@ export declare global {
          developerDetail: {
             id: string;
          }
-         appNavigation: AppNavigationState;
       }
    }
 }

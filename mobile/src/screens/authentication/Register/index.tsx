@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { FlatList, ScrollView, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -37,7 +36,6 @@ const { isAndroid } = useTheme();
 export default function Register() {
 	const { register } = useAccount();
 	const appNavigation = useAppNavigation();
-	const navigation = useNavigation();
 
 	const [errorCreatePassword, setErrorCreatePassword] = useState(false);
 	const { handleSubmit, formState: { errors }, control } = useForm({
@@ -95,40 +93,40 @@ export default function Register() {
 
 	return(
 		<Layout activeHeader headerProps={{ title: 'Cadastre-se', showBack: true }}>
-			<ScrollView 
-				style={styles.container} 
-				contentInset={{ bottom: !isAndroid ? 75 : 0 }}
+			<FlatList 
 				showsVerticalScrollIndicator={false}
-			>
-				{
-					inputs.map(input => (
-						<Controller
-							key={input.name}
-							control={control}
-							rules={{
-								required: true,
-							}}
-							name={input.name as FormValueName}
-							render={({ field: { onChange, value, onBlur } }) => (
-								<Input 
-									{...input}
-									onChangeText={onChange}
-									errorMessage={errors[input.name]?.message}
-									value={value}
-									onBlur={onBlur}
-								/>
-							)}
-						/>
-					))
-				}
-
-				<View style={styles.buttonContainer}>
-					<Button 
-						text='Cadastrar'
-						onPress={handleSubmit(handleRegister)}
+				style={styles.container}
+				data={inputs}
+				keyExtractor={input => input.name}
+				contentInset={{ bottom: !isAndroid ? 75 : 0 }}
+				renderItem={({ item: input }) => (
+					<Controller
+						key={input.name}
+						control={control}
+						rules={{
+							required: true,
+						}}
+						name={input.name as FormValueName}
+						render={({ field: { onChange, value, onBlur } }) => (
+							<Input 
+								{...input}
+								onChangeText={onChange}
+								errorMessage={errors[input.name]?.message}
+								value={value}
+								onBlur={onBlur}
+							/>
+						)}
 					/>
-				</View>
-			</ScrollView>
+				)}
+				ListFooterComponent={
+					<View style={styles.buttonContainer}>
+						<Button 
+							text='Cadastrar'
+							onPress={handleSubmit(handleRegister)}
+						/>
+					</View>
+				}
+			/>
 		</Layout>
 	);
 }

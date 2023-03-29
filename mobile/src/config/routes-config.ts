@@ -9,5 +9,6 @@ export const routesConfig = {
 		profile: 'profile',
 		bottomTabs: 'bottomTabs',
 		newPublication: 'newPublication',
+		developerDetail: 'developerDetail',
 	},
 };

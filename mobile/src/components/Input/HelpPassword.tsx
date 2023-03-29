@@ -1,75 +1,100 @@
-import React, { useMemo } from 'react';
-import { Text, View } from 'react-native';
-import { TextValidation } from '~/utils/TextValidation';
+import React, { useMemo, useCallback } from 'react';
+import { FlatList, Text, TextStyle, View } from 'react-native';
+
+import { helpPasswordValidation } from './utils/help-password-validation';
 
 import styles from './styles';
 
 interface HelpPasswordProps {
    onError?: (err: boolean) => void;
    text: string;
+	onSuccess?: () => void;
 } 
 
 export function HelpPassword(props: HelpPasswordProps) {
-	const { text, onError } = props;
+	const dispatchCallback = useCallback((hasError: boolean) => {
+		if(hasError) {
+			props?.onError?.(hasError);
+		} else {
+			props?.onSuccess?.();
+		}
+	}, [props]);
+
 	const validations = useMemo(() => {
+		const text = props.text;
 		const isEmptyValue = text.length === 0;
 
 		const array = [
 			{
 				message: 'Possuir números',
-				validation: TextValidation.hasNumber(text),
+				isValid: helpPasswordValidation('number')(text),
 				isEmptyValue,
 			},
 			{
 				message: 'Possuir caractéres especiais',
-				validation: TextValidation.hasSpecialChars(text),
+				isValid: helpPasswordValidation('specialChars')(text),
 				isEmptyValue,
 			},
 			{
 				message: 'Possuir letras maiúsculas',
-				validation: TextValidation.hasUppercase(text),
+				isValid: helpPasswordValidation('uppercase')(text),
 				isEmptyValue,
 			},
 			{
 				message: 'Possuir letras minúsculas',
-				validation: TextValidation.hasLowercase(text),
+				isValid: helpPasswordValidation('lowercase')(text),
 				isEmptyValue,
 			},
 			{
 				message: 'Possuir pelo menos 6 dígitos',
-				validation: TextValidation.hasLenght(text, 6),
+				isValid: helpPasswordValidation('hasLenght')(text, 6),
 				isEmptyValue
 			}
 		];
 
-		const hasError = array.some(item => !item.validation);
+		const hasError = array.some(item => !item.isValid);
 
-		onError?.(hasError);
+		if(!isEmptyValue) {
+			dispatchCallback(hasError);
+		}
 
 		return array;
-	}, [text]);
+	}, [props, dispatchCallback]);
 
+	function getValidationStyle(isValid: boolean, isEmptyValue: boolean) {
+		const style: TextStyle[] = [styles.textValidation];
+
+		if(isValid) {
+			style.push(styles.correctValidation);
+		} else {
+			style.push(styles.wrongValidation);
+		}
+
+		if(isEmptyValue) {
+			style.push(styles.emptyText);
+		}
+
+		return style;
+	}
 
 	return(
 		<View style={styles.helpContainer}>
-			<Text style={styles.securityText}>Para sua segurança, faça sua senha com os devidos requisitos</Text>
+			<Text style={styles.securityText}>
+				Para sua segurança, faça sua senha com os devidos requisitos
+			</Text>
 
-			<View>
-				{
-					validations.map((validation, index) => (
-						<Text
-							key={String(index)}
-							style={[
-								styles.textValidation,
-								validation.validation ? styles.correctValidation : styles.wrongValidation,
-								validation.isEmptyValue ? styles.emptyText : undefined
-							]}
-						>
-							{validation.message}
-						</Text>
-					))
-				}
-			</View>
+			<FlatList 
+				data={validations}
+				keyExtractor={item => item.message}
+				renderItem={({ item: validation }) => (
+					<Text
+						style={getValidationStyle(validation.isValid, validation.isEmptyValue)}
+					>
+						{validation.message}
+					</Text>
+				)}
+			/>
+
 		</View>
 	);
 }

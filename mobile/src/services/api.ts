@@ -5,7 +5,7 @@ import { checkIfIsUnauthorized } from '~/utils/check-if-is-unauthorized';
 const { isAndroid } = useTheme();
 
 const api = axios.create({
-	baseURL: isAndroid ? 'http://192.168.0.2:3333' : 'http://localhost:3333',
+	baseURL: isAndroid ? 'http://192.168.15.46:3333' : 'http://localhost:3333',
 	validateStatus: false,
 });
 

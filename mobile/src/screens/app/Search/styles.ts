@@ -25,7 +25,7 @@ export default StyleSheet.create({
 		borderRadius: 8,
 		flexDirection: 'row',
 		borderTopLeftRadius: 0,
-		borderTopRightRadius: 0
+		borderTopRightRadius: 0,
 	},
 	button: {
 		alignItems: 'center',

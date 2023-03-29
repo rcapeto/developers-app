@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, RefreshControl } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, RefreshControl, View } from 'react-native';
 
 import { ServerError } from '~/components/Error/ServerError';
 import { Loading } from '~/components/Loading';
@@ -8,8 +8,12 @@ import { useAccount } from '~/hooks/useAccount';
 import { useAppNavigation  } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
 import { Developer } from '~/types/entitys';
+
 import { DeveloperItem } from './components/Developer';
 import { useDevelopersList } from './hook/useDevelopersList';
+import { ListHeader } from './components/ListHeader';
+import { first } from '~/utils/first';
+import styles from './styles';
 
 interface ListProps {
    search: string;
@@ -18,23 +22,24 @@ interface ListProps {
 const { colors } = useTheme();
 
 export function DevelopersList({ search }: ListProps) {
-	const [page, setPage] = useState(1);
 	const [refreshing, setRefreshing] = useState(false);
 	const [data, setData] = useState<Developer[]>([]);
+	const [count, setCount] = useState(0);
 
 	const { logout } = useAccount();
 	const appNavigation = useAppNavigation();
 
-	const { isLoading, data: queryResponse, isFetching } = useDevelopersList({
+	const { 
+		isLoading, 
+		isFetching, 
+		fetchNextPage, 
+		refetch,
+		data: queryResponse 
+	} = useDevelopersList({
 		logout,
 		onError: handleError,
 		search,
-		page,
 	});
-
-	const totalPages = useMemo<number>(() => {
-		return queryResponse?.response.data.totalPages ?? 1;
-	}, [queryResponse]);
 
 	function handleError() {
 		appNavigation.openDialogBottom({
@@ -47,65 +52,68 @@ export function DevelopersList({ search }: ListProps) {
 
 	function renderItem(params: { item: Developer }) {
 		const { item: developer } = params;
-
-		return(
-			<DeveloperItem developer={developer}/>
-		);
+		return <DeveloperItem developer={developer}/>;
 	}
 
-	function onRefresh() {
+	async function onRefresh() {
 		setRefreshing(true);
 		setData([]);
-		setRefreshing(false);
+
+		try {
+			const { data: response } = await refetch();
+			const results = response?.pages ?? [];
+			const developers = results.map(
+				result => result?.developers ?? []
+			);
+			const count = first(results)?.count ?? 0;
+
+			setCount(+count);
+			setData(developers.flat());
+		} catch(err) {
+			handleError();
+		} finally {
+			setRefreshing(false);
+		}
 	}
 
 	function handleEndReached() {
-		const pageState = page + 1;
-
-		if(pageState <= totalPages) {
-			setPage(state => state + 1);
-		}
+		fetchNextPage();
 	}
 
 	useEffect(() => {
-		if(queryResponse?.response.data.developers) {
-			const developers = queryResponse.response.data.developers ?? [];
-			const isFirstPage = page === 1;
-			setData(state => !isFirstPage ? [...state, ...developers] : developers);
-		}
-	}, [queryResponse, page]);
+		const results = queryResponse?.pages ?? [];
+		const developers = results.map(result => result?.developers ?? []);
+		const count = first(results)?.count ?? 0;
+
+		setCount(+count);
+		setData(developers.flat());
+	}, [queryResponse?.pages]);
 
 	return(
-		<FlatList 
-			data={data}
-			renderItem={renderItem}
-			keyExtractor={item => item.id}
-			style={[styles.mt20, styles.flexOne]}
-			refreshControl={
-				<RefreshControl
-					refreshing={refreshing}
-					onRefresh={onRefresh}
-					tintColor={colors.purple[300]}
-				/>
-			}
-			onEndReachedThreshold={0.2}
-			onEndReached={handleEndReached}
-			showsVerticalScrollIndicator={false}
-			ListFooterComponent={() => (
-				<RenderValidation validation={isLoading || isFetching}>
-					<Loading style={styles.mt20}/>
-				</RenderValidation>
-					
-			)}
-		/>
+		<View style={styles.container}>
+			<ListHeader count={count}/>
+			<FlatList 
+				data={data}
+				renderItem={renderItem}
+				keyExtractor={item => item.id}
+				contentContainerStyle={styles.list}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						tintColor={colors.purple[300]}
+					/>
+				}
+				onEndReached={handleEndReached}
+				onEndReachedThreshold={0.2}
+				showsVerticalScrollIndicator={false}
+				ListFooterComponent={() => (
+					<RenderValidation validation={isLoading || isFetching}>
+						<Loading style={styles.loading}/>
+					</RenderValidation>
+			
+				)}
+			/>
+		</View>
 	);
 }  
-
-const styles = StyleSheet.create({
-	mt20: {
-		marginTop: 20,
-	},
-	flexOne: {
-		flex: 1,
-	}
-});

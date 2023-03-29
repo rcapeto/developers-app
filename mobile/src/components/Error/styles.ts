@@ -18,7 +18,6 @@ export default StyleSheet.create({
 		textAlign: 'center',
 	},
 	buttonClose: {
-		backgroundColor: colors.red[500],
 		marginTop: 20,
 		width: 200
 	},
