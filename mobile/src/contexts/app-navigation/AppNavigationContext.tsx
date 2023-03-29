@@ -2,10 +2,10 @@ import React, { createContext, useRef } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { WithChildren } from '../../types/children';
-import { AppNavigationContextValues, AppNavigationState, ShowAlertConfig } from '../../types/context';
-import Modal, { ModalOpenConfig, ModalActions } from '../../components/Modal';
-import appConfig from '../../config/app';
+import { WithChildren } from '~/types/children';
+import { AppNavigationContextValues, AppNavigationState, ShowAlertConfig } from '~/types/context';
+import Modal, { ModalOpenConfig, ModalActions } from '~/components/Modal';
+import appConfig from '~/config/app';
 
 export const AppNavigationContext = createContext({} as AppNavigationContextValues);
 

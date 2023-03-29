@@ -8,10 +8,10 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-import { Developer } from '../../../../../../../types/entitys';
+import { Developer } from '~/types/entitys';
 import styles from './styles';
-import { useTheme } from '../../../../../../../hooks/useTheme';
-import { RenderValidation } from '../../../../../../../components/RenderValidation';
+import { useTheme } from '~/hooks/useTheme';
+import { RenderValidation } from '~/components/RenderValidation';
 
 interface Props {
    developer: Developer;

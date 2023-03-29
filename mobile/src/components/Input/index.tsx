@@ -4,7 +4,7 @@ import { Octicons } from '@expo/vector-icons';
 
 import styles from './styles';
 import { RenderValidation } from '../RenderValidation';
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '~/hooks/useTheme';
 import { HelpPassword } from './HelpPassword';
 
 export interface InputProps extends Omit<TextInputProps, 'secureTextEntry' | 'onChange' | 'onChangeText'> {

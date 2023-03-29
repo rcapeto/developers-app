@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 import { DevelopersList } from './components/DevelopersList';
-import { Layout } from '../../../components/Layout';
-import { useTheme } from '../../../hooks/useTheme';
+import { Layout } from '~/components/Layout';
+import { RenderValidation } from '~/components/RenderValidation';
+import { useTheme } from '~/hooks/useTheme';
 import styles from './styles';
-import { RenderValidation } from '../../../components/RenderValidation';
 
 const { colors } = useTheme();
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useTheme } from '../hooks/useTheme';
-import { checkIfIsUnauthorized } from '../utils/check-if-is-unauthorized';
+import { useTheme } from '~/hooks/useTheme';
+import { checkIfIsUnauthorized } from '~/utils/check-if-is-unauthorized';
 
 const { isAndroid } = useTheme();
 

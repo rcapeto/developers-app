@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { TextValidation } from '../../utils/TextValidation';
+import { TextValidation } from '~/utils/TextValidation';
 
 import styles from './styles';
 

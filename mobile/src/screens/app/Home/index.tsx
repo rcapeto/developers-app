@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { Layout } from '../../../components/Layout';
+import { Layout } from '~/components/Layout';
 
 export default function Home() {
 	return(

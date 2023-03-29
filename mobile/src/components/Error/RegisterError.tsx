@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import styles from './styles';
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '~/hooks/useTheme';
 import { Button } from '../Button';
 
 interface RegisterErrorProps {

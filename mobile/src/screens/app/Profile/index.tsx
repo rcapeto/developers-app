@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { Layout } from '../../../components/Layout';
-import { useAccount } from '../../../hooks/useAccount';
+import { Layout } from '~/components/Layout';
+import { useAccount } from '~/hooks/useAccount';
 
 import styles from './styles';
 

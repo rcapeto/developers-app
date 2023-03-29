@@ -1,6 +1,6 @@
 import React from 'react';
-import { LoadingPage } from '../components/LoadingPage';
-import { useAccount } from '../hooks/useAccount';
+import { LoadingPage } from '~/components/LoadingPage';
+import { useAccount } from '~/hooks/useAccount';
 import { AuthenticationRoutes } from './authenticate-routes';
 import { AppRoutes } from './app/stack-routes';
 

@@ -6,14 +6,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-import { Input, InputProps } from '../../../components/Input';
-import { Layout } from '../../../components/Layout';
-import { SectionTitle } from '../../../components/SectionTitle';
-import { useTheme } from '../../../hooks/useTheme';
-import { Button } from '../../../components/Button';
+import { Input, InputProps } from '~/components/Input';
+import { Layout } from '~/components/Layout';
+import { SectionTitle } from '~/components/SectionTitle';
+import { useTheme } from '~/hooks/useTheme';
+import { Button } from '~/components/Button';
 
 import styles from './styles';
-import { useAccount } from '../../../hooks/useAccount';
+import { useAccount } from '~/hooks/useAccount';
 
 interface FormValues {
 	username: string;

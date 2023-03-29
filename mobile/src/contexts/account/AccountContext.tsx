@@ -3,19 +3,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-import { LoginError }  from '../../components/Error/LoginError';
-import { ServerError }  from '../../components/Error/ServerError';
-import api, { setHeaderAPI } from '../../services/api';
-import { apiRoutes } from '../../services/api-routes';
-import { ICheckDeveloperResponse, IDeveloperMeResponse, ILoginResponse, IRegisterResponse } from '../../types/api-response';
-import { type WithChildren } from '../../types/children';
-import { AccountContextValues, LoginFunctionParams, RegisterFuncionParams } from '../../types/context';
+import { LoginError }  from '~/components/Error/LoginError';
+import { ServerError }  from '~/components/Error/ServerError';
+import api, { setHeaderAPI } from '~/services/api';
+import { apiRoutes } from '~/services/api-routes';
+import { 
+	ICheckDeveloperResponse, 
+	IDeveloperMeResponse, 
+	ILoginResponse, 
+	IRegisterResponse 
+} from '~/types/api-response';
+import { type WithChildren } from '~/types/children';
+import { AccountContextValues, LoginFunctionParams, RegisterFuncionParams } from '~/types/context';
 import { useAccountReducer, AccountReducerTypes } from './AccountReducer';
-import { asyncStorageConfig } from '../../config/async-storage';
-import { unauthorizedLogout } from '../../utils/invalid-token-logout';
-import { RegisterError } from '../../components/Error/RegisterError';
-import { useAppNavigation } from '../../hooks/useAppNavigation';
-import { useTheme } from '../../hooks/useTheme';
+import { asyncStorageConfig } from '~/config/async-storage';
+import { unauthorizedLogout } from '~/utils/invalid-token-logout';
+import { RegisterError } from '~/components/Error/RegisterError';
+import { useAppNavigation } from '~/hooks/useAppNavigation';
+import { useTheme } from '~/hooks/useTheme';
 
 export const AccountContext = createContext({} as AccountContextValues);
 

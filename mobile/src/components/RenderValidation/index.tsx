@@ -1,5 +1,5 @@
 import React from 'react';
-import { WithChildren } from '../../types/children';
+import { WithChildren } from '~/types/children';
 
 interface RenderValidationProps extends WithChildren {
    validation: boolean;

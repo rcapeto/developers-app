@@ -1,4 +1,4 @@
-import * as styles from '../config/styles';
+import * as styles from '~/config/styles';
 
 export function useTheme() {
 	return styles;

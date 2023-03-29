@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import { RefreshControl } from 'react-native-gesture-handler';
+import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 
-import { ServerError } from '../../../../../components/Error/ServerError';
-import { Loading } from '../../../../../components/Loading';
-import { RenderValidation } from '../../../../../components/RenderValidation';
-import { useAccount } from '../../../../../hooks/useAccount';
-import { useAppNavigation  } from '../../../../../hooks/useAppNavigation';
-import { useTheme } from '../../../../../hooks/useTheme';
-import { Developer } from '../../../../../types/entitys';
+import { ServerError } from '~/components/Error/ServerError';
+import { Loading } from '~/components/Loading';
+import { RenderValidation } from '~/components/RenderValidation';
+import { useAccount } from '~/hooks/useAccount';
+import { useAppNavigation  } from '~/hooks/useAppNavigation';
+import { useTheme } from '~/hooks/useTheme';
+import { Developer } from '~/types/entitys';
 import { DeveloperItem } from './components/Developer';
 import { useDevelopersList } from './hook/useDevelopersList';
 

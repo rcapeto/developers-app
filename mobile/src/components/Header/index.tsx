@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '~/hooks/useTheme';
 
 
 export interface HeaderProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '~/hooks/useTheme';
 
 import styles from './styles';
 

@@ -5,13 +5,13 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Layout } from '../../../components/Layout';
-import { Input, InputProps } from '../../../components/Input';
+import { Layout } from '~/components/Layout';
+import { Input, InputProps } from '~/components/Input';
 import styles from './styles';
-import { Button } from '../../../components/Button';
-import { useTheme } from '../../../hooks/useTheme';
-import { useAccount } from '../../../hooks/useAccount';
-import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { Button } from '~/components/Button';
+import { useTheme } from '~/hooks/useTheme';
+import { useAccount } from '~/hooks/useAccount';
+import { useAppNavigation } from '~/hooks/useAppNavigation';
 
 interface FormValues {
 	username: string;

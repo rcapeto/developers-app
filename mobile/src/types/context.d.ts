@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { AlertButton, AlertOptions } from 'react-native';
-import { ModalOpenConfig } from '../components/Modal';
-import { AccountReducerState } from '../contexts/account/AccountReducer';
+import { ModalOpenConfig } from '~/components/Modal';
+import { AccountReducerState } from '~/contexts/account/AccountReducer';
 
 export interface LoginFunctionParams {
    username: string;

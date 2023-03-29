@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
-import api from '../../../../../../services/api';
-import { apiRoutes } from '../../../../../../services/api-routes';
-import { IAppDataResponseDevelopers } from '../../../../../../types/api-response';
+import api from '~/services/api';
+import { apiRoutes } from '~/services/api-routes';
+import { IAppDataResponseDevelopers } from '~/types/api-response';
 
-import { unauthorizedLogout } from '../../../../../../utils/invalid-token-logout';
+import { unauthorizedLogout } from '~/utils/invalid-token-logout';
 
 interface HookParams {
    page?: number;

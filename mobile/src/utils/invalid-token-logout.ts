@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import appConfig from '../config/app';
+import appConfig from '~/config/app';
 
 export function unauthorizedLogout(logout: () => void) {
 	const message = 'Notamos que seu token está inválido, por favor, por motivos de segurança refaça o seu Login';
