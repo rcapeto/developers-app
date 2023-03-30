@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { Developer } from '~/types/entitys';
+import { Developer } from '~/lib/http/types/entity';
 
 export enum AccountReducerTypes {
 	UPDATE_DEVELOPER = 'UPDATE_DEVELOPER',

@@ -105,22 +105,27 @@ const Modal: ForwardRefRenderFunction<ModalActions> = (props, ref) => {
 					{ state.icon }
 				</View>
 
-				<RenderValidation validation={!!state.title}>
-					<Text style={getStyles(true)}>{state.title}</Text>
-				</RenderValidation>
+				<RenderValidation 
+					validation={!!state.title} 
+					validComponent={<Text style={getStyles(true)}>{state.title}</Text>}
+				/>
 
-				<RenderValidation validation={!!state.description}>
-					<Text style={getStyles(false)}>{state.description}</Text>
-				</RenderValidation>
+				<RenderValidation 
+					validation={!!state.description} 
+					validComponent={<Text style={getStyles(false)}>{state.description}</Text>}
+				/>
 
-				<RenderValidation validation={!!state.showButton}>
-					<Button 
-						text={state.buttonText ?? ''}
-						onPress={onClose}
-						style={styles.button}
-						type={buttonType}
-					/>
-				</RenderValidation>
+				<RenderValidation 
+					validation={!!state.showButton} 
+					validComponent={
+						<Button 
+							text={state.buttonText ?? ''}
+							onPress={onClose}
+							style={styles.button}
+							type={buttonType}
+						/>
+					}
+				/>
 			</View>
 		</ModalNative>
 	);

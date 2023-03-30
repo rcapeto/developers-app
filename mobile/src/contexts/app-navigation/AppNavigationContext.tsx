@@ -2,7 +2,7 @@ import React, { createContext, useRef } from 'react';
 import { Alert } from 'react-native';
 
 import { WithChildren } from '~/types/children';
-import { AppNavigationContextValues, ShowAlertConfig } from '~/types/context';
+import { AppNavigationContextValues, ShowAlertConfig } from '~/types/contexts/app-navigation';
 import Modal, { ModalOpenConfig, ModalActions } from '~/components/Modal';
 import appConfig from '~/config/app';
 

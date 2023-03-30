@@ -4,21 +4,21 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { LoginError }  from '~/components/Error/LoginError';
+import { RegisterError } from '~/components/Error/RegisterError';
 import { ServerError }  from '~/components/Error/ServerError';
+
 import api, { setHeaderAPI } from '~/services/api';
 import { apiRoutes } from '~/services/api-routes';
-import { 
-	ICheckDeveloperResponse, 
-	IDeveloperMeResponse, 
-	ILoginResponse, 
-	IRegisterResponse 
-} from '~/types/api-response';
+
+import { LoginParams, RegisterParams, LoginResponse, RegisterResponse } from '~/lib/http/account/types';
+import { MeResponse } from '~/lib/http/developers/types';
 import { type WithChildren } from '~/types/children';
-import { AccountContextValues, LoginFunctionParams, RegisterFuncionParams } from '~/types/context';
+
+import { AccountContextValues, } from '~/types/contexts/account';
 import { useAccountReducer, AccountReducerTypes } from './AccountReducer';
 import { asyncStorageConfig } from '~/config/async-storage';
 import { unauthorizedLogout } from '~/utils/invalid-token-logout';
-import { RegisterError } from '~/components/Error/RegisterError';
+
 import { useAppNavigation } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
 
@@ -35,7 +35,7 @@ export function AccountContextProvider({ children }: WithChildren) {
 		try {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 			
-			const { data: response } = await api.get<IDeveloperMeResponse>(apiRoutes.developer.me);
+			const { data: response } = await api.get<MeResponse>(apiRoutes.developer.me);
 
 			console.log(response);
 
@@ -61,11 +61,11 @@ export function AccountContextProvider({ children }: WithChildren) {
 		}
 	}
 
-	async function login(params: LoginFunctionParams) {
+	async function login(params: LoginParams) {
 		dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 
 		try {
-			const { data: response } = await api.post<ILoginResponse>(apiRoutes.account.login, params);
+			const { data: response } = await api.post<LoginResponse>(apiRoutes.account.login, params);
 
 			if(response.data.error) {
 				return appNavigation.openDialogBottom({
@@ -79,7 +79,9 @@ export function AccountContextProvider({ children }: WithChildren) {
 
 			const token = response.data.token;
 
-			await handleCheckDeveloper(token);
+			if(token) {
+				await handleCheckDeveloper(token);
+			}
 
 		} catch(err) {
 			return appNavigation.openDialogBottom({
@@ -93,11 +95,11 @@ export function AccountContextProvider({ children }: WithChildren) {
 		}
 	}
 
-	async function register(params: RegisterFuncionParams) {
+	async function register(params: RegisterParams) {
 		try {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 			
-			const { data: response, status } = await api.post<IRegisterResponse | void>(apiRoutes.account.register, params);
+			const { data: response, status } = await api.post<RegisterResponse>(apiRoutes.account.register, params);
 
 
 			if(status === 201 && !response) {
@@ -147,7 +149,7 @@ export function AccountContextProvider({ children }: WithChildren) {
 		const bearerToken = `Bearer ${token}`;
 
 		try {
-			const { data: response } = await api.get<ICheckDeveloperResponse>(apiRoutes.developer.me, {
+			const { data: response } = await api.get<MeResponse>(apiRoutes.developer.me, {
 				headers: {
 					'Authorization': bearerToken
 				}

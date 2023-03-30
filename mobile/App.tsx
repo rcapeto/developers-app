@@ -5,11 +5,14 @@ import { useFonts } from 'expo-font';
 import { QueryClientProvider } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { LoadingPage } from './src/components/LoadingPage';
-import Routes from './src/routes';
-import { AccountContextProvider } from './src/contexts/account/AccountContext';
-import { AppNavigationProvider } from './src/contexts/app-navigation/AppNavigationContext';
-import { client } from './src/config/react-query';
+import { LoadingPage } from '~/components/LoadingPage';
+import { Compose } from '~/components/Compose';
+import Routes from '~/routes';
+import { client } from '~/config/react-query';
+
+import { AccountContextProvider } from '~/contexts/account/AccountContext';
+import { AppNavigationProvider } from '~/contexts/app-navigation/AppNavigationContext';
+import { EventContextProvider } from '~/contexts/events/EventContext';
 
 export default function App() {
 	const [isFontsLoaded] = useFonts({
@@ -22,15 +25,19 @@ export default function App() {
 		return <LoadingPage />;
 	}
 
+	const contexts = [
+		EventContextProvider,
+		AppNavigationProvider,
+		AccountContextProvider
+	];
+
 	return (
 		<QueryClientProvider client={client}>
 			<NavigationContainer>
-				<AppNavigationProvider>
-					<AccountContextProvider>
-						<StatusBar style="light" />
-						<Routes />
-					</AccountContextProvider>
-				</AppNavigationProvider>
+				<Compose contexts={contexts}>
+					<StatusBar style="light" />
+					<Routes />
+				</Compose>
 			</NavigationContainer>
 		</QueryClientProvider>
 	);

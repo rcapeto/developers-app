@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, Fragment } from 'react';
 import { 
 	StyleProp, 
 	View, 
@@ -10,6 +10,7 @@ import {
 import { useTheme } from '~/hooks/useTheme';
 import { WithChildren } from '~/types/children';
 import { type HeaderProps, Header } from '../Header';
+import { RenderValidation } from '../RenderValidation';
 
 import styles from './styles';
 
@@ -42,17 +43,20 @@ export function Layout({
 			behavior={isAndroid ? 'height' : 'padding'}
 			style={styles.flexOne}
 		>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<View style={containerStyles}>
-					{
-						activeHeader && <Header {...headerProps}/>
-					}
-				
-					<View style={styles.content}>
-						{ children }
-					</View>
+			<View style={containerStyles}>
+				<RenderValidation 
+					validation={activeHeader} 
+					validComponent={<Header {...headerProps}/>}
+				/>
+
+				<View style={styles.content}>
+					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+						<Fragment>
+							{children}
+						</Fragment>
+					</TouchableWithoutFeedback>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
 		</KeyboardAvoidingView>
 	);
 }

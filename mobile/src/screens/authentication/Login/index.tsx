@@ -92,10 +92,13 @@ export default function Login() {
 									errorMessage={errors[input.name]?.message}
 									value={value}
 									onBlur={onBlur}
+									autoCapitalize="none"
+									autoCorrect={false}
 								/>
 							)}
 						/>
 					)}
+					scrollEnabled={false}
 				/>
 
 				<View style={styles.buttonContainer}>

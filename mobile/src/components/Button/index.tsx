@@ -61,21 +61,27 @@ export function Button(props: ButtonProps) {
 			{
 				isLoading ? (<Loading spinnerColor="white"/>) : (
 					<View style={[styles.content, isOutlined ? styles.contentOutlined : undefined]}>
-						<RenderValidation validation={!!leftIcon}>
-							<View style={styles.icon}>
-								{ leftIcon }
-							</View>
-						</RenderValidation>
+						<RenderValidation 
+							validation={!!leftIcon}
+							validComponent={
+								<View style={styles.icon}>
+									{ leftIcon }
+								</View>
+							} 
+						/>
 
 						<Text style={[styles.text, isOutlined ? styles.textOutlined : undefined]}>
 							{text}
 						</Text>
 
-						<RenderValidation validation={!!rightIcon}>
-							<View style={styles.icon}>
-								{ rightIcon }
-							</View>
-						</RenderValidation>
+						<RenderValidation 
+							validation={!!rightIcon} 
+							validComponent={
+								<View style={styles.icon}>
+									{ rightIcon }
+								</View>
+							}
+						/>
                
 					</View>
 				)

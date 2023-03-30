@@ -7,7 +7,7 @@ import { RenderValidation } from '~/components/RenderValidation';
 import { useAccount } from '~/hooks/useAccount';
 import { useAppNavigation  } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
-import { Developer } from '~/types/entitys';
+import { Developer } from '~/lib/http/types/entity';
 
 import { DeveloperItem } from './components/Developer';
 import { useDevelopersList } from './hook/useDevelopersList';
@@ -107,12 +107,12 @@ export function DevelopersList({ search }: ListProps) {
 				onEndReached={handleEndReached}
 				onEndReachedThreshold={0.2}
 				showsVerticalScrollIndicator={false}
-				ListFooterComponent={() => (
-					<RenderValidation validation={isLoading || isFetching}>
-						<Loading style={styles.loading}/>
-					</RenderValidation>
-			
-				)}
+				ListFooterComponent={
+					<RenderValidation 
+						validation={isLoading || isFetching} 
+						validComponent={<Loading style={styles.loading}/>}
+					/>
+				}
 			/>
 		</View>
 	);

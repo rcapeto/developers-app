@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -114,6 +114,8 @@ export default function Register() {
 								errorMessage={errors[input.name]?.message}
 								value={value}
 								onBlur={onBlur}
+								autoCapitalize="none"
+								autoCorrect={false}
 							/>
 						)}
 					/>

@@ -54,47 +54,62 @@ export function Input(props: InputProps) {
 
 	return(
 		<View style={styles.container} key={name}>
-			<RenderValidation validation={!!label}>
-				<Text style={styles.label}>{label}</Text>
-			</RenderValidation>
-
+			<RenderValidation 
+				validation={!!label}
+				validComponent={
+					<Text style={styles.label}>{label}</Text>
+				}
+			/>
 			<View style={styles.inputBox}>
-				<RenderValidation validation={!!leftIcon}>
-					<View style={styles.iconBox}>
-						{leftIcon}
-					</View>
-				</RenderValidation>
+				<RenderValidation 
+					validation={!!leftIcon} 
+					validComponent={
+						<View style={styles.iconBox}>
+							{leftIcon}
+						</View>
+					}
+				/>
 
 				<TextInput 
 					style={styles.input} 
 					autoCapitalize="none"
 					{...restProps}
+					keyboardAppearance="dark"
 					onChangeText={handleChangeText}
 					value={text}
 					secureTextEntry={isSecureText}
 				/>
 
-				<RenderValidation validation={!!isPassword}>
-					<View style={styles.iconBox}>
-						<TouchableOpacity onPress={togglePasswordView}>
-							<Octicons 
-								color={colors.gray[300]}
-								size={fontSize.md}
-								name={isSecureText ? 'eye-closed' : 'eye'}
-							/>
-						</TouchableOpacity>
-					</View>
-				</RenderValidation>
+				<RenderValidation 
+					validation={!!isPassword} 
+					validComponent={
+						<View style={styles.iconBox}>
+							<TouchableOpacity onPress={togglePasswordView}>
+								<Octicons 
+									color={colors.gray[300]}
+									size={fontSize.md}
+									name={isSecureText ? 'eye-closed' : 'eye'}
+								/>
+							</TouchableOpacity>
+						</View>
+					}
+				/>
 
 			</View>
 
-			<RenderValidation validation={!!(errorMessage)}>
-				<Text style={styles.error}>{errorMessage}</Text>
-			</RenderValidation>
+			<RenderValidation 
+				validation={!!(errorMessage)} 
+				validComponent={
+					<Text style={styles.error}>{errorMessage}</Text>
+				}
+			/>
 
-			<RenderValidation validation={!!(showPasswordHelp && isPassword)}>
-				<HelpPassword text={text} onError={handleError}/>
-			</RenderValidation>
+			<RenderValidation 
+				validation={!!(showPasswordHelp && isPassword)} 
+				validComponent={
+					<HelpPassword text={text} onError={handleError}/>
+				}
+			/>
 		</View>
 	);
 }

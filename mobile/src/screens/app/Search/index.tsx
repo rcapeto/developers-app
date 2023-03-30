@@ -6,6 +6,7 @@ import { Layout } from '~/components/Layout';
 import { RenderValidation } from '~/components/RenderValidation';
 import { useTheme } from '~/hooks/useTheme';
 import styles from './styles';
+import { Mapper } from '~/components/Mapper';
 
 const { colors } = useTheme();
 
@@ -41,11 +42,14 @@ export default function Search() {
 						autoComplete="off"
 						value={search}
 						onChangeText={setSearch}
+						keyboardAppearance="dark"
 					/>
 				</View>
 				<View style={styles.buttons}>
-					{
-						buttons.map((button, index) => (
+					<Mapper 
+						data={buttons}
+						keyExtractor={button => button.text}
+						renderItem={({ item: button, index }) => (
 							<TouchableOpacity 
 								style={[
 									styles.button,
@@ -58,14 +62,15 @@ export default function Search() {
 									{ button.text }
 								</Text>
 							</TouchableOpacity>
-						))
-					}
+						)}
+					/>
 				</View>
 			</View>
 
-			<RenderValidation validation={activeButton === 0}>
-				<DevelopersList search={search} />
-			</RenderValidation>
+			<RenderValidation 
+				validation={activeButton === 0} 
+				validComponent={<DevelopersList search={search} />}
+			/>
 		</Layout>
 	);
 }

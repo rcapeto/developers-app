@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from 'react-query';
 import api from '~/services/api';
 import { apiRoutes } from '~/services/api-routes';
-import { IAppDataResponseDevelopers } from '~/types/api-response';
+import { GetDevelopersResponse } from '~/lib/http/developers/types';
 
 import { unauthorizedLogout } from '~/utils/invalid-token-logout';
 
@@ -22,7 +22,7 @@ async function getDevelopers(params: GetDevelopersParams) {
 	const search = params.search ?? '';
 
 	try {
-		const { data: response, headers } = await api.get<IAppDataResponseDevelopers>(apiRoutes.developer.all, {
+		const { data: response, headers } = await api.get<GetDevelopersResponse>(apiRoutes.developer.all, {
 			params: {
 				perPage,
 				page,

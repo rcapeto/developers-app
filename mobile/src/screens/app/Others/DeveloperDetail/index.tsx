@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Text } from 'react-native';
 import { useRoute, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
@@ -42,7 +42,7 @@ export function DeveloperDetail() {
 	}
 
 	useFocusEffect(useCallback(() => {
-		if(developerId) {
+		if(!developerId) {
 			handleShowError();
 		}
 	}, [developerId]));
