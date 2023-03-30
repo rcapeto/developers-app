@@ -19,7 +19,7 @@
 ## Layout
 - Alguma das telas que estão no App.
 <br />
-<img src="https://user-images.githubusercontent.com/61842405/228934398-3355d12a-7a1c-4030-9367-8410ec7112c0.png" />
+<img src="https://user-images.githubusercontent.com/61842405/228934398-3355d12a-7a1c-4030-9367-8410ec7112c0.png" style="max-width: 300px;"/>
 <img src="https://user-images.githubusercontent.com/61842405/228934407-3ad9d5d9-6269-48d0-9f62-d71e46525584.png" />
 <img src="https://user-images.githubusercontent.com/61842405/228934419-910ead99-b223-4122-a349-a8d38a25c1bb.png" />
 <img src="https://user-images.githubusercontent.com/61842405/228934431-661c6911-c2fb-415b-bd1a-eaa633289de8.png" />
