@@ -7,20 +7,17 @@ import { LoginError }  from '~/components/Error/LoginError';
 import { RegisterError } from '~/components/Error/RegisterError';
 import { ServerError }  from '~/components/Error/ServerError';
 
-import api, { setHeaderAPI } from '~/services/api';
-import { apiRoutes } from '~/services/api-routes';
 
-import { LoginParams, RegisterParams, LoginResponse, RegisterResponse } from '~/lib/http/account/types';
-import { MeResponse } from '~/lib/http/developers/types';
-import { type WithChildren } from '~/types/children';
+import { LoginParams, RegisterParams } from '~/lib/http/account/types';
+import type { WithChildren } from '~/types/children';
 
 import { AccountContextValues, } from '~/types/contexts/account';
 import { useAccountReducer, AccountReducerTypes } from './AccountReducer';
 import { asyncStorageConfig } from '~/config/async-storage';
-import { unauthorizedLogout } from '~/lib/http/validations/unauthorized';
 
 import { useAppNavigation } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
+import { http } from '~/lib/http';
 
 export const AccountContext = createContext({} as AccountContextValues);
 
@@ -31,51 +28,46 @@ export function AccountContextProvider({ children }: WithChildren) {
 	const appNavigation = useAppNavigation();
 	const navigation = useNavigation();
 
+	function handleMeError() {
+		appNavigation.openDialogBottom({
+			Component: ServerError,
+			isError: true,
+			passProps: {
+				onCloseModal: appNavigation.closeDialogBottom,
+			}
+		});
+	}
+
 	async function me() {
 		try {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
-			
-			const { data: response } = await api.get<MeResponse>(apiRoutes.developer.me);
 
+			const { response } = await http.developers().me(undefined, handleMeError, logout);
+			
 			console.log(response);
 
 		} catch(err) {
-			if(err instanceof Error) {
-				const isUnauthorized = err.message === 'unauthorized';
-
-				if(isUnauthorized) {
-					return unauthorizedLogout(logout);
-				}
-			}
-
-			return appNavigation.openDialogBottom({
-				Component: ServerError,
-				isError: true,
-				passProps: {
-					onCloseModal: appNavigation.closeDialogBottom,
-				}
-			});
-
+			handleMeError();
 		} finally {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 		}
+	}
+
+	function handleLoginError(message?: string) {
+		appNavigation.openDialogBottom({
+			Component: LoginError,
+			passProps: {
+				errorMessage: message ?? '',
+				onCloseModal: appNavigation.closeDialogBottom,
+			}
+		});
 	}
 
 	async function login(params: LoginParams) {
 		dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
 
 		try {
-			const { data: response } = await api.post<LoginResponse>(apiRoutes.account.login, params);
-
-			if(response.data.error) {
-				return appNavigation.openDialogBottom({
-					Component: LoginError,
-					passProps: {
-						errorMessage: response.data.message,
-						onCloseModal: appNavigation.closeDialogBottom,
-					}
-				});
-			}
+			const { response } = await http.account().login(params, handleLoginError);
 
 			const token = response.data.token;
 
@@ -95,14 +87,23 @@ export function AccountContextProvider({ children }: WithChildren) {
 		}
 	}
 
+	function handleRegisterError(message?: string) {
+		appNavigation.openDialogBottom({
+			Component: RegisterError,
+			passProps: {
+				onCloseModal: appNavigation.closeDialogBottom,
+				errorMessage: message ?? '',
+			}
+		});
+	}
+
 	async function register(params: RegisterParams) {
 		try {
 			dispatch({ type: AccountReducerTypes.TOGGLE_LOADING });
+
+			const { success } = await http.account().register(params, handleRegisterError);
 			
-			const { data: response, status } = await api.post<RegisterResponse>(apiRoutes.account.register, params);
-
-
-			if(status === 201 && !response) {
+			if(success) {
 				appNavigation.openDialogBottom({
 					title: 'Usuário cadastrado com sucesso!',
 					showButton: true,
@@ -113,16 +114,6 @@ export function AccountContextProvider({ children }: WithChildren) {
 
 				return navigation.navigate('login');
 			}
-
-			if(response && response.data.error && response.data.message) {
-				return appNavigation.openDialogBottom({
-					Component: RegisterError,
-					passProps: {
-						onCloseModal: appNavigation.closeDialogBottom,
-						errorMessage: response.data.message
-					}
-				});
-			} 
 
 		} catch(err) {
 			return appNavigation.openDialogBottom({
@@ -146,18 +137,10 @@ export function AccountContextProvider({ children }: WithChildren) {
 	}
 
 	async function handleCheckDeveloper(token: string) {
-		const bearerToken = `Bearer ${token}`;
-
 		try {
-			const { data: response } = await api.get<MeResponse>(apiRoutes.developer.me, {
-				headers: {
-					'Authorization': bearerToken
-				}
-			});
+			const { response } = await http.developers().me({ token });
 
 			if(response.data.developer) {
-				setHeaderAPI('Authorization', bearerToken);
-		
 				const { developer } = response.data;
 
 				dispatch({

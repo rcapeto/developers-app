@@ -3,5 +3,8 @@ export enum EventLoginEnum {
 }
 
 export enum EventRequestErrorEnum {
-   DEVELOPERS = 'ERROR_GET_DEVELOPERS'
+   DEVELOPERS = 'ERROR_GET_DEVELOPERS',
+   ME = 'ERROR_GET_ME_INFORMATION',
+   LOGIN = 'ERROR_LOGIN_USER',
+   REGISTER = 'ERROR_REGISTER_USER',
 }

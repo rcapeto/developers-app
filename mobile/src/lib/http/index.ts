@@ -1,6 +1,5 @@
-import { 
-	getDevelopers,
-} from '~/lib/http/developers';
+import { getDevelopers, me } from '~/lib/http/developers';
+import { login, register } from '~/lib/http/account';
 
 export class Http { 
 	constructor() {
@@ -10,7 +9,12 @@ export class Http {
 	developers() {
 		return {
 			getDevelopers,
+			me,
 		};
+	}
+
+	account() {
+		return { login, register };
 	}
 }
 

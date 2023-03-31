@@ -13,6 +13,11 @@ export interface GetDevelopersParams {
    search?: string;
 }
 
+// [GET - Request] => Me data
+export interface MeParams {
+   token: string;
+}
+
 // [GET - Response] => Me data
 export type MeResponse = ApiResponse<{ developer: Developer }>;
 

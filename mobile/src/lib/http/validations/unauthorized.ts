@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { Alert, AlertButton, AlertOptions } from 'react-native';
 import appConfig from '~/config/app';
 
 type Callback = () => void;
@@ -15,8 +15,8 @@ export function checkIsUnauthorized(error: unknown, callback?: Callback) {
 
 export function unauthorizedLogout(callback?: Callback) {
 	const message = 'Notamos que seu token está inválido, por favor, por motivos de segurança refaça o seu Login';
-	const buttons = [{ onPress: callback, style: 'cancel'}];
-	const alertConfig = { userInterfaceStyle: 'dark' };
+	const buttons: AlertButton[] = [{ onPress: callback, style: 'cancel'}];
+	const options: AlertOptions = { userInterfaceStyle: 'dark' };
 
-	return Alert.alert(appConfig.teamName, message, buttons, alertConfig);
+	return Alert.alert(appConfig.teamName, message, buttons, options);
 }

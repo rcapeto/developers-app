@@ -42,11 +42,12 @@ export function DevelopersList({ search }: ListProps) {
 		logout,
 	});
 
-	function handleError() {
+	function handleError(message?: string) {
 		appNavigation.openDialogBottom({
 			Component: ServerError,
 			passProps: {
 				onCloseModal: appNavigation.closeDialogBottom,
+				message: message,
 			}
 		});
 	}

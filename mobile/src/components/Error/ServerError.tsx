@@ -9,9 +9,13 @@ const { colors } = useTheme();
 
 interface ServerErrorProps {
 	onCloseModal?: () => void;
+	message?: string;
 }
 
 export function ServerError(props: ServerErrorProps) {
+	const defaultMessage = 'Ops! Error interno no servidor, por favor tente novamente! 😀';
+	const message = props.message ?? defaultMessage;
+
 	return(
 		<View style={styles.errorContainer}>
 			<Feather 
@@ -20,9 +24,7 @@ export function ServerError(props: ServerErrorProps) {
 				size={40}
 			/>
 
-			<Text style={styles.errorMessage}>
-				Ops! Error interno no servidor, por favor tente novamente! 😀
-			</Text>
+			<Text style={styles.errorMessage}>{message}</Text>
 
 			<Button
 				text='OK!'

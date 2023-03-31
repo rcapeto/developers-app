@@ -4,7 +4,7 @@ import { http } from '~/lib/http';
 interface HookParams {
    perPage?: number;
    search?: string;
-   onError?: () => void;
+   onError?: (message?: string) => void;
 	logout: () => void;
 }
 
@@ -17,7 +17,11 @@ async function hookGetDevelopers(params: GetDevelopersParams) {
 	const getDevelopersParams = { page, perPage, search };
 
 	try { 
-		const { data: response, headers, page } = await http.developers().getDevelopers(getDevelopersParams, logout);
+		const { response, headers, page } = await http.developers().getDevelopers(
+			getDevelopersParams,
+			onError, 
+			logout
+		);
 
 		const totalPages = response?.data?.totalPages ?? 1;
 		const nextPage = page < totalPages ? page + 1 : page;
