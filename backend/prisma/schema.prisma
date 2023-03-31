@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,28 +7,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id        String     @id @default(uuid())
-  firstName String
-  lastName  String
-  avatarUrl String?
-  document  String
-  password  String
-  email     String
-  name      String
-  articles  Articles[]
-  createdAt DateTime
+model Developers {
+  id           String         @id @default(uuid())
+  username     String
+  name         String
+  avatar_url   String
+  techs        String
+  password     String
+  createdAt    DateTime?      @default(now())
+  github       String
+  publications Publications[]
+  points       Int            @default(0)
+  likes        Likes[]
+  comments     Comments[]
 }
 
-model Articles {
-  id          String   @id @default(uuid())
+model Publications {
+  id          String     @id @default(uuid())
+  createdAt   DateTime?  @default(now())
   title       String
+  thumbnail   String
   description String
-  tags        String
-  image       String
-  authorId    String
-  userId      String
-  author      Users    @relation(fields: [userId], references: [id])
-  createdAt   DateTime
-  updatedAt   DateTime
+  developer   Developers @relation(fields: [developerId], references: [id])
+  developerId String
+  likes       Likes[]
+  comments    Comments[]
+  editAt      DateTime?
+}
+
+model Likes {
+  id            String       @id @default(uuid())
+  developerId   String
+  publicationId String
+  developer     Developers   @relation(fields: [developerId], references: [id])
+  publication   Publications @relation(fields: [publicationId], references: [id])
+}
+
+model Comments {
+  id            String       @id @default(uuid())
+  createdAt     DateTime?    @default(now())
+  editAt        DateTime?
+  text          String
+  developerId   String
+  publicationId String
+  developer     Developers   @relation(fields: [developerId], references: [id])
+  publication   Publications @relation(fields: [publicationId], references: [id])
 }

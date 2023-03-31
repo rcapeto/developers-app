@@ -1,6 +1,11 @@
 import { swaggerRoute } from './swagger';
-import { usersRoutes } from './users';
+import { accountRoutes } from './account';
+import { developersRoutes } from './developers';
+import { publicationsRoutes } from './publications';
 
-const routes = [swaggerRoute, usersRoutes];
-
-export default routes;
+export const routes = [
+  swaggerRoute,
+  accountRoutes,
+  developersRoutes,
+  publicationsRoutes,
+];

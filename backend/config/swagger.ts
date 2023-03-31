@@ -3,7 +3,7 @@ import { JsonObject } from 'swagger-ui-express';
 export const swaggerConfig: JsonObject = {
   openapi: '3.0.0',
   info: {
-    title: 'Manipulation deliveries API',
+    title: 'Manipulation API',
     description: 'This is an API Rent',
     version: '1.0.0',
     contact: {
@@ -16,48 +16,614 @@ export const swaggerConfig: JsonObject = {
     },
   ],
   paths: {
-    '/users': {
+    '/account/register': {
       post: {
-        tags: ['Users'],
-        summary: 'Create User',
+        tags: ['Account'],
+        summary: 'Register',
+        description: 'Register a new developer',
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/CreateUser',
+                $ref: '#/components/schemas/CreateDeveloper',
               },
               example: {
-                firstName: 'John',
-                lastName: 'Doe',
-                document: '00000000000',
-                username: 'foobar',
-                password: '@foobar123',
-                confirm_password: '@foobar123',
-                email: 'johndoe@gmail.com',
+                confirm_password: '@test123',
+                password: '@test123',
+                name: 'John Doe',
+                username: 'johndoe',
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Developer was created with success',
+          },
+          400: {
+            description:
+              'Validation error, developer already exists or passwords do not match',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/account/login': {
+      post: {
+        tags: ['Account'],
+        summary: 'Login',
+        description: 'Login a developer',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/LoginDeveloper',
+              },
+              example: {
+                password: '@test123',
+                username: 'johndoe',
               },
             },
           },
         },
         responses: {
           200: {
-            description: 'Status OK!',
-          },
-          400: {
+            description: 'Login with success',
             content: {
               'application/json': {
                 schema: {
-                  $ref: '#/components/schemas/ErrorMessage',
+                  $ref: '#/components/schemas/TokenResponse',
                 },
                 example: {
                   data: {
-                    message:
-                      'User already exists! Please try with other document.',
-                    cause: 'Create Error',
-                    isError: true,
+                    token: 'token',
                   },
                 },
               },
             },
+          },
+          400: {
+            description: 'Validation error',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developers': {
+      get: {
+        tags: ['Developer'],
+        summary: 'All',
+        description: 'Get all developers',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'query',
+            name: 'page',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Current page',
+          },
+          {
+            in: 'query',
+            name: 'perPage',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Number of developers per page',
+          },
+          {
+            in: 'query',
+            name: 'search',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Name, github or techs of developers',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Get all developers with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/GetDevelopers',
+                },
+                example: {
+                  developers: [],
+                  page: 1,
+                  perPage: 10,
+                  totalPages: 3,
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developer/me/delete': {
+      delete: {
+        tags: ['Developer'],
+        summary: 'Developer',
+        description: 'Delete a developer',
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: 'Delete with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Developer not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developer/me/github': {
+      patch: {
+        tags: ['Developer'],
+        summary: 'Developer',
+        description: 'Update the github developer',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/DeveloperUpdateGithub',
+              },
+              example: {
+                github: 'github without @',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Update with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Developer not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developers/:id': {
+      get: {
+        tags: ['Developer'],
+        summary: 'Developer',
+        description: 'Get a developer',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Update with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Developer',
+                },
+                example: {
+                  data: {
+                    developer: {},
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Developer not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developer/me': {
+      get: {
+        tags: ['Developer'],
+        summary: 'Developer',
+        description: 'Get developer profile',
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: 'Update with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Developer',
+                },
+                example: {
+                  data: {
+                    developer: {},
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Developer not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/developer/me/update': {
+      put: {
+        tags: ['Developer'],
+        summary: 'Developer',
+        description: 'Update developer',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/UpdateDeveloper',
+              },
+              example: {
+                confirm_password: '@test123',
+                password: '@test123',
+                name: 'John Doe',
+                username: 'johndoe',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Update with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Developer',
+                },
+                example: {
+                  name: 'John Doe',
+                  avatar_url: 'file',
+                  techs: 'React, Node',
+                  username: 'johndoe',
+                  new_password: 'newpassword',
+                  old_password: 'oldpassword',
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Developer not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications': {
+      get: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Get all publications',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'query',
+            name: 'page',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Current page',
+          },
+          {
+            in: 'query',
+            name: 'perPage',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Number of developers per page',
+          },
+          {
+            in: 'query',
+            name: 'search',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Title, description or developer name',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Get all publications with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/GetPublications',
+                },
+                example: {
+                  publications: [],
+                  page: 1,
+                  perPage: 10,
+                  totalPages: 3,
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/developer/:id': {
+      get: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Get all developer publications',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'params',
+            name: 'id',
+            schema: {
+              type: 'number',
+            },
+            required: true,
+            description: 'Developer ID',
+          },
+          {
+            in: 'query',
+            name: 'page',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Current page',
+          },
+          {
+            in: 'query',
+            name: 'perPage',
+            schema: {
+              type: 'number',
+            },
+            required: false,
+            description: 'Number of developers per page',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Get all developer publications with success',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/GetPublications',
+                },
+                example: {
+                  publications: [],
+                  page: 1,
+                  perPage: 10,
+                  totalPages: 3,
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/create': {
+      post: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Create publication',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreatePublication',
+              },
+              example: {
+                thumbnail: 'optional file',
+                description: 'Publication description',
+                title: 'Publication title',
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Created with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/update/:id': {
+      put: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Update publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreatePublication',
+              },
+              example: {
+                thumbnail: 'optional file',
+                description: 'Publication description',
+                title: 'Publication title',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Update with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/delete/:id': {
+      delete: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Delete publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Delete with success',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/publications/:id': {
+      get: {
+        tags: ['Publications'],
+        summary: 'Publication',
+        description: 'Find one publication',
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'string',
+            },
+            security: [{ bearerAuth: [] }],
+            required: true,
+            description: 'Developer ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Publication',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Publication',
+                },
+                example: {
+                  data: {
+                    publication: {},
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Internal Server Error',
           },
         },
       },
@@ -65,48 +631,293 @@ export const swaggerConfig: JsonObject = {
   },
   components: {
     schemas: {
-      CreateUser: {
+      Publication: {
         type: 'object',
         properties: {
-          firstName: {
-            type: 'string',
+          developer: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+              },
+              github: {
+                type: 'string',
+              },
+              avatar_url: {
+                type: 'object',
+                properties: {
+                  web: { type: 'string' },
+                  mobile: { type: 'string' },
+                  origin: { type: 'string' },
+                },
+              },
+            },
           },
-          lastName: {
-            type: 'string',
-          },
-          email: {
-            type: 'string',
-          },
-          avatarUrl: {
-            type: 'string',
-          },
-          document: {
-            type: 'string',
-          },
-          password: {
-            type: 'string',
-          },
-          confirm_password: {
-            type: 'string',
+          id: { type: 'string ' },
+          createdAt: { type: 'string ' },
+          title: { type: 'string ' },
+          description: { type: 'string ' },
+          developerId: { type: 'string ' },
+          editAt: { type: 'string ' },
+          comments: { type: 'array' },
+          likes: { type: 'array' },
+          thumbnail: {
+            type: 'object',
+            properties: {
+              web: { type: 'string' },
+              mobile: { type: 'string' },
+              origin: { type: 'string' },
+            },
           },
         },
       },
-      ErrorMessage: {
+      CreatePublication: {
+        type: 'object',
+        properties: {
+          description: { type: 'string' },
+          title: { type: 'string' },
+          thumbnail: { type: 'string' },
+        },
+      },
+      GetPublications: {
         type: 'object',
         properties: {
           data: {
             type: 'object',
             properties: {
-              message: {
-                type: 'string',
+              publications: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    developer: {
+                      type: 'object',
+                      properties: {},
+                    },
+                    comments: {
+                      type: 'array',
+                    },
+                    createdAt: {
+                      type: 'datetime',
+                    },
+                    description: {
+                      type: 'string',
+                    },
+                    title: {
+                      type: 'string',
+                    },
+                    id: {
+                      type: 'string',
+                    },
+                    thumbnail: {
+                      type: 'object',
+                      properties: {
+                        web: { type: 'string ' },
+                        mobile: { type: 'string ' },
+                        origin: { type: 'string ' },
+                      },
+                    },
+                  },
+                },
               },
-              cause: {
-                type: 'string',
+              perPage: {
+                type: 'number',
               },
-              isError: {
-                type: 'boolean',
+              page: {
+                type: 'number',
+              },
+              totalPages: {
+                type: 'number',
               },
             },
+          },
+        },
+      },
+      UpdateDeveloper: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          avatar_url: {
+            type: 'string',
+          },
+          techs: {
+            type: 'string',
+          },
+          username: {
+            type: 'string',
+          },
+          new_password: {
+            type: 'string',
+          },
+          old_password: {
+            type: 'string',
+          },
+        },
+      },
+      DeveloperUpdateGithub: {
+        type: 'object',
+        properties: {
+          github: {
+            type: 'string',
+          },
+        },
+      },
+      Developer: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+          },
+          username: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+          techs: {
+            type: 'string',
+          },
+          github: {
+            type: 'string',
+          },
+          points: {
+            type: 'number',
+          },
+          createdDate: {
+            type: 'string',
+          },
+          avatar_url: {
+            type: 'object',
+            properties: {
+              mobile: {
+                type: 'string',
+              },
+              web: {
+                type: 'string',
+              },
+              origin: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+      GetDevelopers: {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              developers: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                    },
+                    username: {
+                      type: 'string',
+                    },
+                    name: {
+                      type: 'string',
+                    },
+                    techs: {
+                      type: 'string',
+                    },
+                    github: {
+                      type: 'string',
+                    },
+                    points: {
+                      type: 'number',
+                    },
+                    createdDate: {
+                      type: 'string',
+                    },
+                    avatar_url: {
+                      type: 'object',
+                      properties: {
+                        mobile: {
+                          type: 'string',
+                        },
+                        web: {
+                          type: 'string',
+                        },
+                        origin: {
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              perPage: {
+                type: 'number',
+              },
+              page: {
+                type: 'number',
+              },
+              totalPages: {
+                type: 'number',
+              },
+            },
+          },
+        },
+      },
+      LoginDeveloper: {
+        type: 'object',
+        properties: {
+          password: {
+            type: 'string',
+          },
+          username: {
+            type: 'string',
+          },
+        },
+      },
+      CreateDeveloper: {
+        type: 'object',
+        properties: {
+          confirm_password: {
+            type: 'string',
+          },
+          password: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+          username: {
+            type: 'string',
+          },
+        },
+      },
+      TokenResponse: {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              token: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+      ServerMessage: {
+        type: 'object',
+        properties: {
+          message: {
+            type: 'string',
+          },
+          cause: {
+            type: 'string',
+          },
+          error: {
+            type: 'boolean',
           },
         },
       },
