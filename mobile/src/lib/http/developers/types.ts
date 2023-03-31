@@ -6,6 +6,13 @@ export interface GetDeveloperParams {
    developerId: string;
 }
 
+// [GET - Request] => Developers List
+export interface GetDevelopersParams {
+   page?: number;
+   perPage?: number;
+   search?: string;
+}
+
 // [GET - Response] => Me data
 export type MeResponse = ApiResponse<{ developer: Developer }>;
 

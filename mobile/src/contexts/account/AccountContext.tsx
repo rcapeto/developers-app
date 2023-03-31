@@ -17,7 +17,7 @@ import { type WithChildren } from '~/types/children';
 import { AccountContextValues, } from '~/types/contexts/account';
 import { useAccountReducer, AccountReducerTypes } from './AccountReducer';
 import { asyncStorageConfig } from '~/config/async-storage';
-import { unauthorizedLogout } from '~/utils/invalid-token-logout';
+import { unauthorizedLogout } from '~/lib/http/validations/unauthorized';
 
 import { useAppNavigation } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
@@ -165,11 +165,7 @@ export function AccountContextProvider({ children }: WithChildren) {
 					payload: { developer }
 				});
 
-				AsyncStorage.setItem(
-					asyncStorageConfig.token,
-					token
-				);
-				
+				AsyncStorage.setItem(asyncStorageConfig.token, token);
 			}
 		} catch(err) {
 			AsyncStorage.removeItem(asyncStorageConfig.token);

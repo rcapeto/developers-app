@@ -9,9 +9,8 @@ const api = axios.create({
 	validateStatus: false,
 });
 
-
-api.interceptors.response.use(async response => {
-	if(response.data && checkIfIsUnauthorized(response.data)) {
+api.interceptors.response.use(response => {
+	if(response && response.data && checkIfIsUnauthorized(response.data)) {
 		throw new Error('unauthorized');
 	}
 	return response;

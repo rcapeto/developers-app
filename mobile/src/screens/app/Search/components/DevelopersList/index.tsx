@@ -34,18 +34,19 @@ export function DevelopersList({ search }: ListProps) {
 		isFetching, 
 		fetchNextPage, 
 		refetch,
+		isError,
 		data: queryResponse 
 	} = useDevelopersList({
-		logout,
 		onError: handleError,
 		search,
+		logout,
 	});
 
 	function handleError() {
 		appNavigation.openDialogBottom({
 			Component: ServerError,
 			passProps: {
-				onCloseModal: appNavigation.closeDialogBottom
+				onCloseModal: appNavigation.closeDialogBottom,
 			}
 		});
 	}
@@ -109,7 +110,7 @@ export function DevelopersList({ search }: ListProps) {
 				showsVerticalScrollIndicator={false}
 				ListFooterComponent={
 					<RenderValidation 
-						validation={isLoading || isFetching} 
+						validation={(isLoading || isFetching) && !isError} 
 						validComponent={<Loading style={styles.loading}/>}
 					/>
 				}
