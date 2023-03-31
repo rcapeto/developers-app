@@ -25,10 +25,12 @@ export function DeveloperItem({ developer }: Props) {
 	const navigation = useNavigation();
 
 	const handleNavigateDeveloperScreen = useCallback(() => {
-		navigation.navigate('developerDetail', { 
-			id: developer.id,
-		});
-	}, [navigation]);
+		if(developer) {
+			navigation.navigate('developerDetail', { 
+				id: developer.id,
+			});
+		}
+	}, [navigation, developer]);
 
 	const developerImage = useMemo<ImageSourcePropType>(() => {
 		const emptyImage = appConfig.emptyImage;
@@ -42,6 +44,10 @@ export function DeveloperItem({ developer }: Props) {
 
 		return { uri: emptyImage };
 	}, [developer, isAndroid]);
+
+	if(!developer) {
+		return null;
+	}
 
 	return(
 		<TouchableOpacity onPress={handleNavigateDeveloperScreen}>

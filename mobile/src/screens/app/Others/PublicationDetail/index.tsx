@@ -13,12 +13,12 @@ interface Params {
 
 const { colors } = useTheme();
 
-export function DeveloperDetail() {
+export function PublicationDetail() {
 	const route = useRoute();
 	const appNavigation = useAppNavigation();
 	const navigation = useNavigation();
 
-	const developerId = useMemo<string>(() => {
+	const publicationId = useMemo<string>(() => {
 		const { id } = route.params as Params;
 		return id ?? '';
 	}, [route.params]);
@@ -26,7 +26,7 @@ export function DeveloperDetail() {
 	function handleShowError() {
 		appNavigation.openDialogBottom({
 			buttonText: 'Ok!',
-			description: 'Ops! Desenvolvedor não encontrado!',
+			description: 'Ops! Publicação não encontrada!',
 			isError: true,
 			title: 'Erro!',
 			showButton: true,
@@ -42,21 +42,21 @@ export function DeveloperDetail() {
 	}
 
 	useFocusEffect(useCallback(() => {
-		if(!developerId) {
+		if(!publicationId) {
 			handleShowError();
 		}
-	}, [developerId]));
+	}, [publicationId]));
 
 	return(
 		<Layout 
 			activeHeader
 			headerProps={{ 
-				title: 'Detalhes do(a) Dev',
+				title: 'Detalhes da Publicação',
 				showCloseButton: true,
 			}}
 		>
 			<Text style={{ color: 'white'}}>
-            Dev
+            Publicação
 			</Text>
 		</Layout>
 	);

@@ -44,4 +44,13 @@ export default StyleSheet.create({
 	loadingContainer: {
 		marginTop: 20,
 	},
+	componentLoading: {
+		marginTop: 20,
+	},
+	componentContainer: {
+		flex: 1,
+	},
+	componentList: {
+		paddingBottom: 50,
+	},
 });

@@ -7,11 +7,11 @@ import { RenderValidation } from '~/components/RenderValidation';
 import { useAccount } from '~/hooks/useAccount';
 import { useAppNavigation  } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
-import { Developer } from '~/lib/http/types/entity';
+import { Publication } from '~/lib/http/types/entity';
 
-import { DeveloperItem } from './components/Developer';
-import { useDevelopersList } from './hook/useDevelopersList';
 import { ListHeader } from '~/screens/app/Search/components/ListHeader';
+import { usePublicatonsList } from './hooks/usePublicatonsList';
+import { PublicationItem } from './components/PublicationItem';
 import { first } from '~/utils/first';
 import styles from '~/screens/app/Search/styles';
 
@@ -21,9 +21,9 @@ interface ListProps {
 
 const { colors } = useTheme();
 
-export function DevelopersList({ search }: ListProps) {
+export function PublicationsList({ search }: ListProps) {
 	const [refreshing, setRefreshing] = useState(false);
-	const [data, setData] = useState<Developer[]>([]);
+	const [data, setData] = useState<Publication[]>([]);
 	const [count, setCount] = useState(0);
 
 	const { logout } = useAccount();
@@ -36,7 +36,7 @@ export function DevelopersList({ search }: ListProps) {
 		refetch,
 		isError,
 		data: queryResponse 
-	} = useDevelopersList({
+	} = usePublicatonsList({
 		onError: handleError,
 		search,
 		logout,
@@ -52,9 +52,9 @@ export function DevelopersList({ search }: ListProps) {
 		});
 	}
 
-	function renderItem(params: { item: Developer }) {
-		const { item: developer } = params;
-		return <DeveloperItem developer={developer}/>;
+	function renderItem(params: { item: Publication }) {
+		const { item: publication } = params;
+		return <PublicationItem publication={publication} />;
 	}
 
 	async function onRefresh() {
@@ -64,13 +64,13 @@ export function DevelopersList({ search }: ListProps) {
 		try {
 			const { data: response } = await refetch();
 			const results = response?.pages ?? [];
-			const developers = results.map(
-				result => result?.developers ?? []
+			const publications = results.map(
+				result => result?.publications ?? []
 			);
 			const count = first(results)?.count ?? 0;
 
 			setCount(+count);
-			setData(developers.flat());
+			setData(publications.flat());
 		} catch(err) {
 			handleError();
 		} finally {
@@ -84,7 +84,7 @@ export function DevelopersList({ search }: ListProps) {
 
 	useEffect(() => {
 		const results = queryResponse?.pages ?? [];
-		const developers = results.map(result => result?.developers ?? []);
+		const developers = results.map(result => result?.publications ?? []);
 		const count = first(results)?.count ?? 0;
 
 		setCount(+count);
@@ -93,8 +93,8 @@ export function DevelopersList({ search }: ListProps) {
 
 	return(
 		<View style={styles.componentContainer}>
-			<ListHeader count={count} title="Desenvolvedores"/>
-			
+			<ListHeader count={count} title="Publicações"/>
+
 			<FlatList 
 				data={data}
 				renderItem={renderItem}

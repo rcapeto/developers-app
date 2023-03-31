@@ -13,19 +13,17 @@ import { HTTPErrorCallback } from '~/lib/http/types/api-response';
 import { EventManager } from '~/utils/app/events/EventManager';
 import { EventRequestErrorEnum } from '~/utils/app/events/enum';
 
-export async function getDeveloper(params: GetDeveloperParams) {
+export async function one(params: GetDeveloperParams) {
 	console.log(params);
 	return null;  
 }
 
-export async function getDevelopers(
+export async function all(
 	params: Partial<GetDevelopersParams>, 
 	errorCallback?: HTTPErrorCallback,
 	unauthorizedCallback?: HTTPErrorCallback,
 ) {
-	const page = params.page ?? 1;
-	const perPage = params.perPage ?? 10;
-	const search = params.search ?? '';
+	const { page, perPage, search } = Object.assign({ page: 1, perPage: 10, search: '' }, params);
 	const eventManager = EventManager.getInstance();
 
 	try {

@@ -1,23 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 import { DevelopersList } from './components/DevelopersList';
+import { PublicationsList } from './components/PublicationsList';
 import { Layout } from '~/components/Layout';
-import { RenderValidation } from '~/components/RenderValidation';
 import { useTheme } from '~/hooks/useTheme';
 import styles from './styles';
 import { Mapper } from '~/components/Mapper';
 
 const { colors } = useTheme();
 
-const buttons = [
-	{
-		text: 'Desenvolvedores',
-	},
-	{
-		text: 'Publicações',
-	}
-];
+const buttons = ['Desenvolvedores', 'Publicações'];
 
 export default function Search() {
 	const [activeButton, setActiveButton] = useState(0);
@@ -28,6 +21,10 @@ export default function Search() {
 			setActiveButton(index);
 		};
 	}
+
+	const Component = useMemo(() => {
+		return activeButton === 0 ? DevelopersList : PublicationsList;
+	}, [activeButton]);
 
 	return(
 		<Layout activeHeader headerProps={{ title: 'Explorar'}}>
@@ -48,7 +45,7 @@ export default function Search() {
 				<View style={styles.buttons}>
 					<Mapper 
 						data={buttons}
-						keyExtractor={button => button.text}
+						keyExtractor={button => button}
 						renderItem={({ item: button, index }) => (
 							<TouchableOpacity 
 								style={[
@@ -56,10 +53,9 @@ export default function Search() {
 									index === activeButton ? styles.activeButton : undefined
 								]} 
 								onPress={changeActiveButton(index)}
-								key={button.text}
 							>
 								<Text style={styles.buttonText}>
-									{ button.text }
+									{ button }
 								</Text>
 							</TouchableOpacity>
 						)}
@@ -67,10 +63,7 @@ export default function Search() {
 				</View>
 			</View>
 
-			<RenderValidation 
-				validation={activeButton === 0} 
-				validComponent={<DevelopersList search={search} />}
-			/>
+			<Component search={search} />
 		</Layout>
 	);
 }
