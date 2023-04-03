@@ -1,9 +1,10 @@
 import { 
-	GetDeveloperParams, 
 	GetDevelopersParams, 
 	GetDevelopersResponse, 
 	MeParams,
-	MeResponse 
+	MeResponse,
+	GetDeveloperParams,
+	GetDeveloperResponse,
 } from '~/lib/http/developers/types';
 import api, { setHeaderAPI } from '~/services/api';
 import { apiRoutes } from '~/services/api-routes';
@@ -12,11 +13,6 @@ import { checkIsUnauthorized } from '~/lib/http/validations/unauthorized';
 import { HTTPErrorCallback } from '~/lib/http/types/api-response';
 import { EventManager } from '~/utils/app/events/EventManager';
 import { EventRequestErrorEnum } from '~/utils/app/events/enum';
-
-export async function one(params: GetDeveloperParams) {
-	console.log(params);
-	return null;  
-}
 
 export async function all(
 	params: Partial<GetDevelopersParams>, 
@@ -46,7 +42,6 @@ export async function all(
 	} catch(err) {
 		eventManager.emmit(EventRequestErrorEnum.DEVELOPERS);
 		checkIsUnauthorized(err, unauthorizedCallback);
-      
 		throw new HttpError('Error get developers');
 	}
 }
@@ -64,11 +59,11 @@ export async function me(
 	try {
 		const { data: response } = await api.get<MeResponse>(apiRoutes.developer.me, { headers });
 
-		if(response.data.developer) {
+		if(response && response.data && response.data.developer) {
 			setHeaderAPI('Authorization', bearerToken ?? '');
 		}
 
-		if(response.data && response.data.error) {
+		if(response && response.data && response.data.error) {
 			const message = response.data.message ?? '';
 			errorCallback?.(message);
 		}
@@ -76,14 +71,34 @@ export async function me(
 		return { response, token };
 
 	} catch(err) {
-		eventManager.emmit(EventRequestErrorEnum.ME, { 
-			eventValue: {
-				token: token ?? '',
-			}
-		});
-
+		eventManager.emmit(EventRequestErrorEnum.ME, { eventValue: { token: token ?? '' } });
 		checkIsUnauthorized(err, unauthorizedCallback);
+		throw new HttpError('Error get developer[me] information');
+	}
+}
 
+export async function findOne(
+	params: GetDeveloperParams, 
+	errorCallback?: HTTPErrorCallback,
+	unauthorizedCallback?: HTTPErrorCallback,
+) {
+	const eventManager = EventManager.getInstance();
+	const developerId = params.developerId;
+	
+	try {
+		const { data: response } = await api.get<GetDeveloperResponse>(apiRoutes.developer.findOne(developerId));
+
+		if(response && response.data && response.data.error) {
+			const message = response.data.message ?? '';
+			eventManager.emmit(EventRequestErrorEnum.DEVELOPER, { eventValue: { developerId, message } });
+			errorCallback?.(message);
+		}
+
+		return { response };
+
+	} catch(err) {
+		eventManager.emmit(EventRequestErrorEnum.DEVELOPER, { eventValue: { developerId } });
+		checkIsUnauthorized(err, unauthorizedCallback);
 		throw new HttpError('Error get developer information');
 	}
 }

@@ -21,6 +21,7 @@ export class Http {
 		return {
 			all: developersRequest.all,
 			me: developersRequest.me,
+			findOne: developersRequest.findOne,
 		};
 	}
 
@@ -31,6 +32,7 @@ export class Http {
 	publications() {
 		return {
 			all: publicationsRequest.all,
+			findOne: publicationsRequest.findOne,
 		};
 	}
 }

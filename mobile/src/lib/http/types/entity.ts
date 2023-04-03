@@ -31,6 +31,7 @@ export interface Publication {
    likes: [];
    editAt: string | null;
    title: string;
+   developerId: string;
    thumbnail: {
       origin: string;
       mobile: string;

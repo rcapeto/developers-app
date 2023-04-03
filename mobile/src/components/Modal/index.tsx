@@ -25,7 +25,7 @@ export interface ModalOpenConfig {
 	icon: React.ReactNode;
 	showButton: boolean;
 	buttonText: string;
-	onCloseCallback: () => void;
+	onCloseCallback: CallableFunction;
 }
 export interface ModalActions {
 	onOpen: (config: Partial<ModalOpenConfig>) => void;

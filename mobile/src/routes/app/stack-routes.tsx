@@ -16,7 +16,7 @@ export function AppRoutes() {
 				component={BottomTabsRoutes}
 			/>
 
-			<Group screenOptions={{ presentation: 'modal' }}>
+			<Group screenOptions={{ presentation: 'containedModal' }}>
 				<Screen 
 					name={routesConfig.app.developerDetail}
 					component={DeveloperDetail}

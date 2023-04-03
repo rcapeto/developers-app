@@ -15,3 +15,13 @@ export type GetPublicationsResponse = ApiResponse<{
    totalPages: number;
    publications: Publication[];
 }>
+
+// [GET - Request] => Publication data
+export interface GetPublicationParams {
+   publicationId: string;
+}
+
+// [GET - Response] => Publication data
+export type GetPublicationResponse = ApiResponse<{
+   publication: Publication;
+}>;
