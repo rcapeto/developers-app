@@ -32,6 +32,7 @@ export function Input(props: InputProps) {
 		onChangeText,
 		onErrorValidation,
 		name,
+		style: restPropsStyle,
 		...restProps 
 	} = props;
 
@@ -71,7 +72,7 @@ export function Input(props: InputProps) {
 				/>
 
 				<TextInput 
-					style={styles.input} 
+					style={[restPropsStyle, styles.input]} 
 					autoCapitalize="none"
 					{...restProps}
 					keyboardAppearance="dark"

@@ -1,4 +1,4 @@
-export enum EventLoginEnum {
+export enum EventaAccountEnum {
    LOGIN = 'ON_PRESS_LOGIN',
 }
 
@@ -10,4 +10,5 @@ export enum EventRequestErrorEnum {
    PUBLICATONS = 'ERROR_GET_PUBLICATIONS',
    DEVELOPER = 'ERROR_GET_DEVELOPER_INFORMATION',
    PUBLICATION = 'ERROR_GET_PUBLICATION_INFORMATION',
+   CREATE_PUBLICATION = 'ERROR_CREATE_A_PUBLICATION'
 }

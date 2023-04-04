@@ -11,5 +11,6 @@ export const apiRoutes = {
 	publication: {
 		all: '/publications',
 		findOne: (publicationId: string) => `/publications/${publicationId}`,
+		create: '/publications/create',
 	}
 };

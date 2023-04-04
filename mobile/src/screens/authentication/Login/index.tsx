@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { FlatList, View } from 'react-native';
-import { Controller, useForm,  } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FontAwesome } from '@expo/vector-icons';
