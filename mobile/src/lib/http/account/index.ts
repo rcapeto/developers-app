@@ -41,6 +41,6 @@ export async function register(params: RegisterParams, errorCallback?: HTTPError
 		eventManager.emmit(EventRequestErrorEnum.REGISTER, { 
 			eventValue: { ...params },
 		});
-		throw new HttpError(`Error application login: ${(err as Error).message}`);
+		throw new HttpError(`Error application register: ${(err as Error).message}`);
 	} 
 }

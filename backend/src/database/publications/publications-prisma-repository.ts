@@ -148,6 +148,9 @@ export class PublicationsPrismaRepository implements PublicationsRepository {
       const publications = (await client.publications.findMany({
         take: perPage,
         skip: (page - 1) * perPage,
+        orderBy: {
+          createdAt: 'asc',
+        },
         where: {
           developerId,
         },

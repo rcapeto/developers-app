@@ -4,6 +4,7 @@ import { Poppins_400Regular, Poppins_700Bold, Poppins_500Medium } from '@expo-go
 import { useFonts } from 'expo-font';
 import { QueryClientProvider } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 import { LoadingPage } from '~/components/LoadingPage';
 import { Compose } from '~/components/Compose';
@@ -32,13 +33,15 @@ export default function App() {
 	];
 
 	return (
-		<QueryClientProvider client={client}>
-			<NavigationContainer>
-				<Compose contexts={contexts}>
-					<StatusBar style="light" />
-					<Routes />
-				</Compose>
-			</NavigationContainer>
-		</QueryClientProvider>
+		<RootSiblingParent>
+			<QueryClientProvider client={client}>
+				<NavigationContainer>
+					<Compose contexts={contexts}>
+						<StatusBar style="light" />
+						<Routes />
+					</Compose>
+				</NavigationContainer>
+			</QueryClientProvider>
+		</RootSiblingParent>
 	);
 }

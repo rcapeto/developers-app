@@ -4,8 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { routesConfig } from '~/config/routes-config';
 import { BottomTabsRoutes } from './bottom-tabs-routes';
 import { DeveloperDetail } from '~/screens/app/Others/DeveloperDetail';
+import { PublicationDetail } from '~/screens/app/Others/PublicationDetail';
 
-const { Screen, Navigator } = createNativeStackNavigator();
+const { Screen, Navigator, Group } = createNativeStackNavigator();
 
 export function AppRoutes() {
 	return(
@@ -14,10 +15,17 @@ export function AppRoutes() {
 				name={routesConfig.app.bottomTabs}
 				component={BottomTabsRoutes}
 			/>
-			<Screen 
-				name={routesConfig.app.developerDetail}
-				component={DeveloperDetail}
-			/>
+
+			<Group screenOptions={{ presentation: 'containedModal' }}>
+				<Screen 
+					name={routesConfig.app.developerDetail}
+					component={DeveloperDetail}
+				/>
+				<Screen 
+					name={routesConfig.app.publicationDetail}
+					component={PublicationDetail}
+				/>
+			</Group>
 		</Navigator>
 	);
 }

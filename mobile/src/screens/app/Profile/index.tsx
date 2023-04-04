@@ -103,7 +103,6 @@ export default function Profile() {
 						<View style={styles.githubContainer}>
 							<RenderValidation 
 								validation={Boolean(developer?.github)} 
-								// validation={false} 
 								validComponent={
 									<Field 
 										name="Github"

@@ -6,8 +6,10 @@ export const apiRoutes = {
 	developer: {
 		me: '/developer/me',
 		all: '/developers',
+		findOne: (developerId: string) => `/developers/${developerId}`,
 	},
 	publication: {
-		all: '/publications'
+		all: '/publications',
+		findOne: (publicationId: string) => `/publications/${publicationId}`,
 	}
 };

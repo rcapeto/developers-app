@@ -10,6 +10,9 @@ export declare global {
          newPublication: undefined;
          developerDetail: {
             id: string;
+         };
+         publicationDetail: {
+            id: string;
          }
       }
    }

@@ -8,17 +8,17 @@ interface HookParams {
 	logout: () => void;
 }
 
-interface GetDevelopersParams extends HookParams {
+interface GetPublicationsParams extends HookParams {
 	page: number;
 }
 
-async function hookGetDevelopers(params: GetDevelopersParams) {
+async function hookGetPublications(params: GetPublicationsParams) {
 	const { page, perPage, search, onError, logout } = params;
-	const getDevelopersParams = { page, perPage, search };
+	const getPublicationsParams = { page, perPage, search };
 
 	try { 
-		const { response, headers, page } = await http.developers().all(
-			getDevelopersParams,
+		const { response, headers, page } = await http.publications().all(
+			getPublicationsParams,
 			onError, 
 			logout
 		);
@@ -27,7 +27,7 @@ async function hookGetDevelopers(params: GetDevelopersParams) {
 		const nextPage = page < totalPages ? page + 1 : page;
 		
 		return {
-			developers: response?.data?.developers ?? [],
+			publications: response?.data?.publications ?? [],
 			totalPages,
 			nextPage,
 			hasNextPage: nextPage !== page,
@@ -39,12 +39,12 @@ async function hookGetDevelopers(params: GetDevelopersParams) {
 	}
 }
 
-export function useDevelopersList(params: HookParams) {
+export function usePublicatonsList(params: HookParams) {
 	return useInfiniteQuery(
 		['developers', params.search],
 		async ({ 
 			pageParam = 1,
-		}) => await hookGetDevelopers({ ...params, page: pageParam }),
+		}) => await hookGetPublications({ ...params, page: pageParam }),
 		{
 			getNextPageParam: (lastPage) => {
 				if(lastPage?.hasNextPage) {

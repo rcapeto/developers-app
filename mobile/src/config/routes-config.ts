@@ -10,5 +10,6 @@ export const routesConfig = {
 		bottomTabs: 'bottomTabs',
 		newPublication: 'newPublication',
 		developerDetail: 'developerDetail',
+		publicationDetail: 'publicationDetail'
 	},
 };
