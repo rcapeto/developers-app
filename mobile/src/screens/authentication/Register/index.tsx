@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import{ z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Layout } from '~/components/Layout';
 import { Input, InputProps } from '~/components/Input';
@@ -12,24 +12,20 @@ import { useTheme } from '~/hooks/useTheme';
 import { useAccount } from '~/hooks/useAccount';
 import { useAppNavigation } from '~/hooks/useAppNavigation';
 
-interface FormValues {
-	username: string;
-	password: string;
-   confirm_password: string;
-   name: string;
-}
-
-type FormValueName = keyof FormValues;
-
-const registerSchema = yup.object().shape({
-	name: yup.string().required('Nome é obrigatório'),
-	username: yup.string().required('Usuário é obrigatório'),
-	password: yup.string().required('Senha é obrigatório').min(6, 'No mínimo 6 caractéres'),
-	confirm_password: yup.string().oneOf(
-		[null, yup.ref('password')], 
-		'As senhas precisam ser iguais!'
-	),
+const registerSchema = z.object({
+	name: z.string().nonempty('Nome é obrigatório'),
+	username: z.string().nonempty('Usuário é obrigatório'),
+	password: z.string().nonempty('Senha é obrigatório').min(6, 'No mínimo 6 caractéres'),
+	confirm_password: z.string().nonempty('Confirmação de senha é obrigatório').min(6, 'No mínimo 6 caractéres'),
+}).refine(data => {
+	return data.password === data.confirm_password;
+}, { 
+	message: 'Senhas não são iguais!',
+	path: ['confirm_password']
 });
+
+type FormValues = z.infer<typeof registerSchema>;
+type FormValueName = keyof FormValues;
 
 const { isAndroid } = useTheme();
 
@@ -45,7 +41,7 @@ export default function Register() {
 			password: '',
 			confirm_password: ''
 		},
-		resolver: yupResolver(registerSchema),
+		resolver: zodResolver(registerSchema),
 	});
 
 	async function handleRegister(values: FormValues) {
