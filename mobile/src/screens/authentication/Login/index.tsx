@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { FlatList, View } from 'react-native';
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm,  } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,19 +15,16 @@ import { Button } from '~/components/Button';
 import styles from './styles';
 import { useAccount } from '~/hooks/useAccount';
 
-interface FormValues {
-	username: string;
-	password: string;
-}
+const loginSchema = z.object({
+	username: z.string().nonempty('Usuário é obrigatório'),
+	password: z.string().nonempty('Senha é obrigatória').min(6, 'Digite 6 caractéres no mínimo')
+});
 
+type FormValues = z.infer<typeof loginSchema>;
 type FormValueName = keyof FormValues;
 
 const { colors, fontSize } = useTheme();
 
-const loginSchema = yup.object().shape({
-	username: yup.string().required('Usuário é obrigatório'),
-	password: yup.string().required('Senha é obrigatório').min(6, 'No mínimo 6 caractéres'),
-});
 
 export default function Login() {
 	const navigation = useNavigation();
@@ -38,7 +35,7 @@ export default function Login() {
 			username: '',
 			password: ''
 		},
-		resolver: yupResolver(loginSchema),
+		resolver: zodResolver(loginSchema),
 	});
 
 	async function handleLogin(values: FormValues) {

@@ -108,7 +108,11 @@ export function Input(props: InputProps) {
 			<RenderValidation 
 				validation={!!(showPasswordHelp && isPassword)} 
 				validComponent={
-					<HelpPassword text={text} onError={handleError}/>
+					<HelpPassword 
+						text={text} 
+						onError={handleError} 
+						onSuccess={() => handleError(false)}
+					/>
 				}
 			/>
 		</View>
