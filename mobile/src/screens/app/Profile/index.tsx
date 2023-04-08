@@ -90,6 +90,7 @@ export default function Profile() {
 	return(
 		<Layout activeHeader headerProps={{ title: 'Perfil'}}>
 			<FlatList 
+				showsVerticalScrollIndicator={false}
 				style={styles.container}
 				ListHeaderComponent={
 					<View style={styles.headerContainer}>

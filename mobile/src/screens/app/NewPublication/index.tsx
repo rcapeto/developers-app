@@ -1,8 +1,8 @@
 import React, { Fragment, useMemo, useState } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -16,17 +16,13 @@ import { useAppNavigation } from '~/hooks/useAppNavigation';
 import { useTheme } from '~/hooks/useTheme';
 import { ImagePicker } from './components/ImagePicker';
 
-interface FormValues {
-	title: string;
-	description: string;
-}
-
-type FormValueName = keyof FormValues;
-
-const createPublicationSchema = yup.object().shape({
-	title: yup.string().required('Adicione um título para sua incrível publicação'),
-	description: yup.string().required('Adicione uma descrição para sua incrível publicação'),
+const createPublicationSchema = z.object({
+	title: z.string().nonempty('Adicione um título para sua incrível publicação'),
+	description: z.string().nonempty('Adicione uma descrição para sua incrível publicação'),
 });
+
+type FormValues = z.infer<typeof createPublicationSchema>;
+type FormValueName = keyof FormValues;
 
 export default function NewPublication() {
 	const [thumbnail, setThumbnail] = useState('');
@@ -36,7 +32,7 @@ export default function NewPublication() {
 			title: '',
 			description: '',
 		},
-		resolver: yupResolver(createPublicationSchema),
+		resolver: zodResolver(createPublicationSchema),
 	});
 
 	const { logout } = useAccount();
@@ -54,8 +50,11 @@ export default function NewPublication() {
 				name: 'description',
 				label: 'Descrição',
 				multiline: true,
+				boxStyle: {
+					height: 150,
+				},
 				style: {
-					minHeight: 150,
+					height: '100%'
 				},
 				textAlignVertical: 'top'
 			}
@@ -117,6 +116,7 @@ export default function NewPublication() {
 
 				<FlatList 
 					style={styles.form}
+					showsVerticalScrollIndicator={false}
 					data={inputs}
 					keyExtractor={input => input.name}
 					contentContainerStyle={styles.formContent}

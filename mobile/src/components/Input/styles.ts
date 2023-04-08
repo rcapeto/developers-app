@@ -16,7 +16,7 @@ export default StyleSheet.create({
 	inputBox: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		minHeight: 60,
+		height: 60,
 		marginTop: 10,
 		width: '100%',
 		backgroundColor: colors.gray[800],
