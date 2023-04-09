@@ -26,8 +26,6 @@ export function ImagePicker(props: ImagePickerProps) {
 			allowsMultipleSelection: false,
 		});
 
-		console.log('result here', result);
-
 		if(!result.canceled) {
 			const image = first(result.assets)?.uri ?? '';
 

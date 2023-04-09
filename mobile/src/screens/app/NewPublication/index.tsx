@@ -27,7 +27,7 @@ type FormValueName = keyof FormValues;
 export default function NewPublication() {
 	const [thumbnail, setThumbnail] = useState('');
 
-	const { control, handleSubmit, formState: { errors }, resetField } = useForm({
+	const { control, handleSubmit, formState: { errors }, reset } = useForm({
 		defaultValues: {
 			title: '',
 			description: '',
@@ -86,8 +86,7 @@ export default function NewPublication() {
 			buttonText: 'Ok!',
 			icon: <AntDesign name="checkcircle" color={colors.green[500]} size={40} />,
 			onCloseCallback: () => {
-				resetField('description');
-				resetField('title');
+				reset({ description: '', title: '' });
 				setThumbnail('');
 				navigation.goBack();
 			},
