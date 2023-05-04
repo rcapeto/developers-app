@@ -33,6 +33,7 @@ export class Http {
 		return {
 			all: publicationsRequest.all,
 			findOne: publicationsRequest.findOne,
+			create: publicationsRequest.create,
 		};
 	}
 }

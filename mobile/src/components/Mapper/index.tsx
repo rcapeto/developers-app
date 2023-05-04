@@ -1,6 +1,6 @@
 import React, { ReactNode, Fragment } from 'react';
 
-type RenderItemParams<Type> =  {
+export type RenderItemParams<Type> =  {
    item: Type;
    index: number;
 }

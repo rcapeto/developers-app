@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { View, Text, ImageSourcePropType, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ImageSourcePropType, Image, TouchableOpacity, ImageErrorEventData, NativeSyntheticEvent } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,6 +37,11 @@ export function PublicationItem({ publication }: PublicationItemProps) {
 		}
 	}, [navigation, publication]);
 
+	function onErrorRenderImage(error: NativeSyntheticEvent<ImageErrorEventData>) {
+		error.currentTarget.setNativeProps({ 
+			source: [{ uri: appConfig.emptyThumbnail }]
+		});
+	}
 
 	if(!publication) {
 		return null;
@@ -45,7 +50,11 @@ export function PublicationItem({ publication }: PublicationItemProps) {
 	return(
 		<TouchableOpacity style={styles.container} onPress={handleNavigatePublicationScreen}>
 			<View style={styles.imageContainer}>
-				<Image source={thumbnailImage} style={styles.image} />
+				<Image 
+					source={thumbnailImage} 
+					style={styles.image} 
+					onError={onErrorRenderImage}
+				/>
 			</View>
 
 			<View style={styles.information}>

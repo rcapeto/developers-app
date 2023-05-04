@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, TextInputProps } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, TextInputProps, ViewStyle, StyleProp } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 
 import styles from './styles';
@@ -16,6 +16,7 @@ export interface InputProps extends Omit<TextInputProps, 'secureTextEntry' | 'on
 	onChangeText?: (text: string) => void;
 	onErrorValidation?: (err: boolean) => void;
 	name: string;
+	boxStyle?: StyleProp<ViewStyle>;
 }
 
 const { colors, fontSize } = useTheme();
@@ -32,6 +33,8 @@ export function Input(props: InputProps) {
 		onChangeText,
 		onErrorValidation,
 		name,
+		style: restPropsStyle,
+		boxStyle,
 		...restProps 
 	} = props;
 
@@ -60,7 +63,7 @@ export function Input(props: InputProps) {
 					<Text style={styles.label}>{label}</Text>
 				}
 			/>
-			<View style={styles.inputBox}>
+			<View style={[styles.inputBox, boxStyle]}>
 				<RenderValidation 
 					validation={!!leftIcon} 
 					validComponent={
@@ -71,7 +74,7 @@ export function Input(props: InputProps) {
 				/>
 
 				<TextInput 
-					style={styles.input} 
+					style={[styles.input, restPropsStyle]} 
 					autoCapitalize="none"
 					{...restProps}
 					keyboardAppearance="dark"

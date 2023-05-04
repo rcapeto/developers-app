@@ -209,6 +209,7 @@ export class PublicationsPrismaRepository implements PublicationsRepository {
           },
           editAt: true,
           title: true,
+          thumbnail: true,
         },
         orderBy: {
           createdAt: 'desc',

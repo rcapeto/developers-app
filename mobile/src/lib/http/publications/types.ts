@@ -25,3 +25,13 @@ export interface GetPublicationParams {
 export type GetPublicationResponse = ApiResponse<{
    publication: Publication;
 }>;
+
+// [POST - Resquest] => Create Publicaton
+export interface PostPublicationParams {
+   thumbnail: string;
+   title: string;
+   description: string;
+}
+
+// [POST - Response] => Create Publication
+export type PostPublicationResponse = ApiResponse | undefined;

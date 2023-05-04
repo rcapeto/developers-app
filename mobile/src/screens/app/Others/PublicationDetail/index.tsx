@@ -26,7 +26,7 @@ export function PublicationDetail() {
 	const route = useRoute();
 	const appNavigation = useAppNavigation();
 	const navigation = useNavigation();
-	const { logout } = useAccount();
+	const { logout, developer } = useAccount();
 	const { isAndroid, colors } = useTheme();
 
 	const publicationId = useMemo<string>(() => {
@@ -103,6 +103,10 @@ export function PublicationDetail() {
 		console.log('Like/Unlike publication');
 	}
 
+	function handleNavigateUpdatePublicationScreen() {
+		console.log('Let\'s go to update screen');
+	}
+
 	function renderPublicationContent() {
 		return(
 			<ScrollView 
@@ -119,6 +123,22 @@ export function PublicationDetail() {
 								{publication?.developer?.name}
 							</Text>
 						</View>
+
+						<RenderValidation 
+							validation={publication?.developerId === developer?.id}
+							validComponent={
+								<TouchableOpacity style={styles.authorEditPublicaton} onPress={handleNavigateUpdatePublicationScreen}>
+									<Feather 
+										name="edit"
+										color={colors.purple[300]}
+									/>
+									<Text style={styles.authorEditPublicatonText}> 
+										Editar
+									</Text>
+								</TouchableOpacity>
+							}
+						/>
+
 					</View>
 				</TouchableOpacity>
 				<View style={styles.thumbnailContainer}>

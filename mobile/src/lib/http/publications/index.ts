@@ -2,7 +2,9 @@ import {
 	GetPublicationsParams , 
 	GetPublicationsResponse, 
 	GetPublicationParams, 
-	GetPublicationResponse 
+	GetPublicationResponse,
+	PostPublicationParams,
+	PostPublicationResponse
 } from '~/lib/http/publications/types';
 import api from '~/services/api';
 import { apiRoutes } from '~/services/api-routes';
@@ -71,5 +73,49 @@ export async function findOne(
 		});
 		checkIsUnauthorized(err, unauthorizedCallback);
 		throw new HttpError('Error get publications');
+	}
+}
+
+export async function create(
+	params: PostPublicationParams,
+	errorCallback?: HTTPErrorCallback,
+	unauthorizedCallback?: HTTPErrorCallback,
+) {
+	const eventManager = EventManager.getInstance();
+	const { description, thumbnail, title } = params;
+	const formData = new FormData();
+
+	formData.append('title', title);
+	formData.append('description', description);
+	formData.append('thumbnail', {
+		name: `image-${thumbnail}.jpg`,
+		type: 'image/jpg',
+		uri: thumbnail,
+	});
+
+	try {
+		const { data: response } = await api.post<PostPublicationResponse>(apiRoutes.publication.create, formData);
+
+		if(response && response.data && response.data.error) {
+			const message = response.data.message ?? '';
+			errorCallback?.(message);
+			eventManager.emmit(EventRequestErrorEnum.CREATE_PUBLICATION, {
+				eventValue: {
+					...params,
+					message,
+				}
+			});
+		}
+
+		return { response };
+		
+	} catch(err) {
+		eventManager.emmit(EventRequestErrorEnum.CREATE_PUBLICATION, {
+			eventValue: {
+				...params,
+			}
+		});
+		checkIsUnauthorized(err, unauthorizedCallback);
+		throw new HttpError('Error create a publication');
 	}
 }

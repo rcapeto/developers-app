@@ -30,6 +30,17 @@ export default StyleSheet.create({
 		fontSize: fontSize.md,
 		color: colors.gray[200]
 	},
+	authorEditPublicaton: {
+		marginLeft: 'auto',
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	authorEditPublicatonText: {
+		color: colors.purple[300],
+		marginLeft: 5,
+		fontSize: fontSize.xs,
+		fontFamily: fontFamily.body
+	},
 	thumbnailContainer: {
 		marginTop: 10,
 	},
